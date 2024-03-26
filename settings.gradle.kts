@@ -16,4 +16,3 @@ dependencyResolutionManagement {
 rootProject.name = "Muzika"
 include(":app")
 include(":ui_kit")
-include(":innertube")
