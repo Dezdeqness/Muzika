@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.dezdeqness.ui_kit"
+    namespace = "com.dezdeqness.core.ui"
     compileSdk = 33
 
     defaultConfig {
@@ -34,7 +34,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = "1.5.9"
     }
     packaging {
         resources {
