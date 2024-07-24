@@ -5,16 +5,17 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.com.google.dagger.hilt.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.dezdeqness.muzika"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dezdeqness.muzika"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = 24
+        targetSdk = 34
         versionCode = 1
         versionName = "0.1.0"
 
@@ -34,14 +35,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.toString()
     }
     packaging {
         resources {
@@ -51,7 +49,6 @@ android {
 }
 
 dependencies {
-    implementation(project(path = ":ui_kit"))
 
     implementation(platform(libs.compose.bom))
 
@@ -91,5 +88,7 @@ dependencies {
     implementation(libs.hiltAndroid)
     kapt(libs.hiltCompiler)
     implementation(libs.hilt.navigation.compose)
+
+    implementation(libs.core.ui)
 
 }
