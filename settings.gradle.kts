@@ -24,9 +24,16 @@ dependencyResolutionManagement {
                 password = props["github.token"].toString()
             }
         }
+        maven {
+            url = uri("https://maven.pkg.github.com/Dezdeqness/Pod")
+            credentials {
+                username = props["github.username"].toString()
+                password = props["github.token"].toString()
+            }
+        }
     }
 }
 
 rootProject.name = "Muzika"
 include(":app")
-
+include(":innertube")

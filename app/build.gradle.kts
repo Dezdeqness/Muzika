@@ -3,7 +3,6 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.compose.compiler)
 }
@@ -78,12 +77,7 @@ dependencies {
     implementation(libs.media3.ui)
     implementation(libs.media3.common)
     implementation(libs.media3.session)
-
-    implementation(libs.ktor.core)
-    implementation(libs.ktor.okhttp)
-    implementation(libs.ktor.content.negotiation)
-    implementation(libs.ktor.serialization)
-    implementation(libs.okhttp.logging)
+    implementation(libs.pod.core)
 
     implementation(libs.hiltAndroid)
     kapt(libs.hiltCompiler)
@@ -91,4 +85,5 @@ dependencies {
 
     implementation(libs.core.ui)
 
+    implementation(project(":innertube"))
 }
