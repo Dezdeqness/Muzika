@@ -17,6 +17,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://www.jitpack.io")
         maven {
             url = uri("https://maven.pkg.github.com/Dezdeqness/Android-Support-Things")
             credentials {

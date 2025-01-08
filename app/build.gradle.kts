@@ -1,20 +1,18 @@
-
 plugins {
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.dezdeqness.muzika"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.dezdeqness.muzika"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
 
@@ -30,9 +28,19 @@ android {
             )
         }
     }
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -79,11 +87,17 @@ dependencies {
     implementation(libs.media3.session)
     implementation(libs.pod.core)
 
-    implementation(libs.hiltAndroid)
-    kapt(libs.hiltCompiler)
-    implementation(libs.hilt.navigation.compose)
-
     implementation(libs.core.ui)
+
+    api(libs.bundles.ktor.common)
+    api(libs.bundles.ktorfit.common)
+    api(libs.okhttp.logging)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.android)
+    implementation(project.dependencies.platform(libs.koin.bom))
 
     implementation(project(":innertube"))
 }
