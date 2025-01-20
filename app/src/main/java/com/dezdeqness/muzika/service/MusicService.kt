@@ -62,6 +62,8 @@ class MusicService : MediaSessionService() {
     private fun createMediaSourceFactory() = DefaultMediaSourceFactory(createDataSourceFactory())
 
     private fun createDataSourceFactory(): DataSource.Factory {
+        val songUrlCache = HashMap<String, Pair<String, Long>>()
+
         return ResolvingDataSource.Factory(
             CacheDataSource
                 .Factory()
@@ -72,11 +74,20 @@ class MusicService : MediaSessionService() {
                         .setUpstreamDataSourceFactory(DefaultDataSource.Factory(this))
                 )
         ) { dataSpec ->
-            val id = dataSpec.key.orEmpty()
+            val mediaId = dataSpec.key ?: error("No media id")
+
+            if (downloaderCache.isCached(mediaId, dataSpec.position, if (dataSpec.length >= 0) dataSpec.length else 1) ||
+                playerCache.isCached(mediaId, dataSpec.position, 512 * 1024L)
+            ) {
+                return@Factory dataSpec
+            }
+
+            songUrlCache[mediaId]?.takeIf { it.second < System.currentTimeMillis() }?.let {
+                return@Factory dataSpec.withUri(it.first.toUri())
+            }
 
             val result = runBlocking(Dispatchers.IO) {
-//                playerApiDataSource.player(id)
-                YouTube.player(id)
+                YouTube.player(mediaId)
             }
 
             val playerResponse = result.getOrNull()
@@ -85,8 +96,9 @@ class MusicService : MediaSessionService() {
                     ?.filter { it.isAudio }
                     ?.maxByOrNull {
                         it.bitrate * 1 + (if (it.mimeType.startsWith("audio/webm")) 10240 else 0)
-                    }
+                    }!!
 
+            songUrlCache[mediaId] = format.url!! to playerResponse.streamingData!!.expiresInSeconds * 1000L
             dataSpec.withUri(format?.url!!.toUri()).subrange(dataSpec.uriPositionOffset, 512 * 1024L)
         }
     }
