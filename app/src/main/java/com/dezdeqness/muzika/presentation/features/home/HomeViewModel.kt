@@ -31,7 +31,7 @@ class HomeViewModel(
     init {
         launchOnIo {
 
-            searchApiDataSource
+            YouTube
                 .search(
                     query = "Three days grace",
                     filter = YouTube.SearchFilter("EgWKAQIIAWoKEAkQBRAKEAMQBA%3D%3D"),
@@ -63,7 +63,7 @@ class HomeViewModel(
     @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
     fun loadQuery(songId: String, mediaController: MediaController) {
         launchOnIo {
-            nextApiDataSource.next(WatchEndpoint(videoId = songId))
+            YouTube.next(WatchEndpoint(videoId = songId))
                 .onSuccess { result ->
                     val items = ArrayList(result.items)
 
