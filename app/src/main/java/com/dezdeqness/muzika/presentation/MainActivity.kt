@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleAlpha
 //import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -58,8 +60,19 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MaterialTheme {
+
+                val rippleTheme = RippleConfiguration(
+                    rippleAlpha = RippleAlpha(
+                        pressedAlpha = 0.48f,
+                        focusedAlpha = 0.48f,
+                        draggedAlpha = 0.16f,
+                        hoveredAlpha = 0.08f
+                    ),
+                    color = Color.White,
+                )
+
                 CompositionLocalProvider(
-//                    LocalRippleTheme provides RippleCustomTheme,
+                    LocalRippleConfiguration provides rippleTheme,
                     LocalPlaybackConnection provides playbackConnection,
                 ) {
                     val navController = rememberNavController()
@@ -142,22 +155,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-
-//private object RippleCustomTheme : RippleTheme {
-//
-//    @Composable
-//    override fun defaultColor() =
-//        Color.White
-//
-//    @Composable
-//    override fun rippleAlpha(): RippleAlpha =
-//        RippleAlpha(
-//            pressedAlpha = 0.48f,
-//            focusedAlpha = 0.48f,
-//            draggedAlpha = 0.16f,
-//            hoveredAlpha = 0.08f
-//        )
-//}
 
 val LocalPlaybackConnection =
     staticCompositionLocalOf<PlaybackConnection?> { error("No PlaybackConnection provided") }
