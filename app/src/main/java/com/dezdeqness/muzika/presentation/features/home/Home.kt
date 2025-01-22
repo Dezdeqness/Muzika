@@ -2,7 +2,7 @@ package com.dezdeqness.muzika.presentation.features.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,11 +54,8 @@ fun Home(
 
     val lazyGridState = rememberLazyGridState()
 
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        val maxWidth = maxWidth
+    Box(modifier = Modifier.fillMaxSize()) {
+        val maxWidth = 400.dp
 
         val orientation = configuration.orientation
         val widthGridFactor = if (orientation == Configuration.ORIENTATION_PORTRAIT) 0.9f else 0.45f
