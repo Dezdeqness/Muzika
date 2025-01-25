@@ -1,7 +1,6 @@
 package com.dezdeqness.muzika.service
 
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +29,10 @@ class PlaybackConnection(
     override fun onPlaybackStateChanged(state: Int) {
         super.onPlaybackStateChanged(state)
         playBackState.value = state
+    }
+
+    fun onPositionChanged(position: Long) {
+        mediaController.seekTo(position)
     }
 
     fun togglePauseResume() {
