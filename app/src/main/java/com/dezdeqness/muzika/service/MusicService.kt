@@ -20,7 +20,7 @@ import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
-class MusicService : MediaSessionService() {
+class MusicService : MediaSessionService(), MediaSession.Callback {
 
     private val playerApiDataSource: PlayerApiDataSource by inject()
 
@@ -46,7 +46,7 @@ class MusicService : MediaSessionService() {
             .build()
         mediaSession = MediaSession
             .Builder(this, player)
-            .setCallback(PlaybackCallback())
+            .setCallback(this)
             .build()
     }
 
@@ -76,7 +76,11 @@ class MusicService : MediaSessionService() {
         ) { dataSpec ->
             val mediaId = dataSpec.key ?: error("No media id")
 
-            if (downloaderCache.isCached(mediaId, dataSpec.position, if (dataSpec.length >= 0) dataSpec.length else 1) ||
+            if (downloaderCache.isCached(
+                    mediaId,
+                    dataSpec.position,
+                    if (dataSpec.length >= 0) dataSpec.length else 1
+                ) ||
                 playerCache.isCached(mediaId, dataSpec.position, 512 * 1024L)
             ) {
                 return@Factory dataSpec
@@ -93,18 +97,16 @@ class MusicService : MediaSessionService() {
             val playerResponse = result.getOrNull()
 
             val format = playerResponse?.streamingData?.adaptiveFormats
-                    ?.filter { it.isAudio }
-                    ?.maxByOrNull {
-                        it.bitrate * 1 + (if (it.mimeType.startsWith("audio/webm")) 10240 else 0)
-                    }!!
+                ?.filter { it.isAudio }
+                ?.maxByOrNull {
+                    it.bitrate * 1 + (if (it.mimeType.startsWith("audio/webm")) 10240 else 0)
+                }!!
 
-            songUrlCache[mediaId] = format.url!! to playerResponse.streamingData!!.expiresInSeconds * 1000L
-            dataSpec.withUri(format?.url!!.toUri()).subrange(dataSpec.uriPositionOffset, 512 * 1024L)
+            songUrlCache[mediaId] =
+                format.url!! to playerResponse.streamingData!!.expiresInSeconds * 1000L
+            dataSpec.withUri(format?.url!!.toUri())
+                .subrange(dataSpec.uriPositionOffset, 512 * 1024L)
         }
     }
-
-}
-
-class PlaybackCallback : MediaSession.Callback {
 
 }

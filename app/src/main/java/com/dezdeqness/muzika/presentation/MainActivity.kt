@@ -53,6 +53,15 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("UnusedBoxWithConstraintsScope")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sessionToken = SessionToken(this, ComponentName(this, MusicService::class.java))
+        controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
+        controllerFuture?.addListener({
+            if (controllerFuture?.isDone == true) {
+                mediaController = controllerFuture?.get()
+                playbackConnection = PlaybackConnection(mediaController!!)
+
+            }
+        }, ContextCompat.getMainExecutor(this))
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowCompat.getInsetsController(window, window.decorView.rootView).apply {
             isAppearanceLightStatusBars = false
@@ -128,25 +137,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        val sessionToken = SessionToken(this, ComponentName(this, MusicService::class.java))
-        controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        controllerFuture?.addListener({
-            if (controllerFuture?.isDone == true) {
-                mediaController = controllerFuture?.get()
-                playbackConnection = PlaybackConnection(mediaController!!)
-
-            }
-        }, ContextCompat.getMainExecutor(this))
-
-    }
-
-    override fun onStop() {
-        super.onStop()
-        controllerFuture?.let { MediaController.releaseFuture(it) }
-        playbackConnection?.dispose()
+    override fun onDestroy() {
+        super.onDestroy()
+        if (isFinishing) {
+            controllerFuture?.let { MediaController.releaseFuture(it) }
+            playbackConnection?.dispose()
+        }
     }
 
 }
