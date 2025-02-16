@@ -1,12 +1,5 @@
 package com.dezdeqness.muzika.di.core
 
-import com.dezdeqness.innertube.core.Constants
-import com.dezdeqness.innertube.service.NextService
-import com.dezdeqness.innertube.service.PlayerService
-import com.dezdeqness.innertube.service.SearchService
-import com.dezdeqness.innertube.service.createNextService
-import com.dezdeqness.innertube.service.createPlayerService
-import com.dezdeqness.innertube.service.createSearchService
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
@@ -47,22 +40,10 @@ val networkModule = module {
     single<Ktorfit> {
         Ktorfit
             .Builder()
-            .baseUrl(Constants.Endpoints.BASE_URL)
+//            .baseUrl(Constants.Endpoints.BASE_URL)
             .httpClient(get<HttpClient>())
             .converterFactories(ResponseConverterFactory())
             .build()
-    }
-
-    single<NextService> {
-        get<Ktorfit>().createNextService()
-    }
-
-    single<PlayerService> {
-        get<Ktorfit>().createPlayerService()
-    }
-
-    single<SearchService> {
-        get<Ktorfit>().createSearchService()
     }
 
 }

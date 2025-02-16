@@ -35,6 +35,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Muzika"
+rootProject.name = "Aqua"
 include(":app")
-include(":innertube")

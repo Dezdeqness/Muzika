@@ -4,12 +4,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,6 +32,7 @@ import com.dezdeqness.muzika.presentation.LocalPlaybackConnection
 import com.dezdeqness.muzika.core.ui.ContentTile
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Search(
     viewModel: SearchViewModel = koinViewModel(),
@@ -36,7 +43,9 @@ fun Search(
     val mediaItem = playbackConnection.currentMediaItem.collectAsState()
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.statusBars.only(
+            WindowInsetsSides.Horizontal + WindowInsetsSides.Top
+        )),
     ) {
 
         var query by remember {

@@ -1,5 +1,6 @@
 package com.dezdeqness.muzika.service
 
+import android.net.Uri
 import androidx.core.net.toUri
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
@@ -12,17 +13,11 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
-import com.dezdeqness.innertube.core.YouTube
-import com.dezdeqness.muzika.data.datasource.PlayerApiDataSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class MusicService : MediaSessionService(), MediaSession.Callback {
-
-    private val playerApiDataSource: PlayerApiDataSource by inject()
 
     val playerCache: SimpleCache by inject(named("PlayerCache"))
 
@@ -90,22 +85,7 @@ class MusicService : MediaSessionService(), MediaSession.Callback {
                 return@Factory dataSpec.withUri(it.first.toUri())
             }
 
-            val result = runBlocking(Dispatchers.IO) {
-                YouTube.player(mediaId)
-            }
-
-            val playerResponse = result.getOrNull()
-
-            val format = playerResponse?.streamingData?.adaptiveFormats
-                ?.filter { it.isAudio }
-                ?.maxByOrNull {
-                    it.bitrate * 1 + (if (it.mimeType.startsWith("audio/webm")) 10240 else 0)
-                }!!
-
-            songUrlCache[mediaId] =
-                format.url!! to playerResponse.streamingData!!.expiresInSeconds * 1000L
-            dataSpec.withUri(format?.url!!.toUri())
-                .subrange(dataSpec.uriPositionOffset, 512 * 1024L)
+            dataSpec.withUri(Uri.EMPTY).subrange(dataSpec.uriPositionOffset, 512 * 1024L)
         }
     }
 

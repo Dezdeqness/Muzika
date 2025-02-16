@@ -8,16 +8,12 @@ import org.koin.dsl.module
 val viewmodelModule = module {
     viewModel {
         HomeViewModel(
-            searchApiDataSource = get(),
-            nextApiDataSource = get(),
             coroutineDispatcherProvider = get(),
         )
     }
 
     viewModel {
         SearchViewModel(
-            searchApiDataSource = get(),
-            nextApiDataSource = get(),
             coroutineDispatcherProvider = get(),
         )
     }
