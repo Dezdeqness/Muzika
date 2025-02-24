@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.appcompat)
 
     implementation(libs.core.ktx)
+    implementation(project(":feature:auth"))
 
     implementation(libs.lifecycle.runtime.ktx)
 

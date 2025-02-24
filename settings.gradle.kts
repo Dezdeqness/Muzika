@@ -37,3 +37,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Aqua"
 include(":app")
+include(":feature:auth")
