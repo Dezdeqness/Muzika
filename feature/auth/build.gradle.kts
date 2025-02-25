@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -27,6 +28,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.toString()
+    }
 
     kotlinOptions {
         jvmTarget = "17"
@@ -37,6 +44,20 @@ dependencies {
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.ktorfit.common)
     implementation(libs.okhttp.logging)
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.android)
+    implementation(libs.ui)
+    implementation(libs.ui.util)
+    implementation(libs.ui.graphics)
+    implementation(libs.foundation)
+    implementation(libs.material3)
+    implementation(libs.ui.tooling.preview)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.activity.compose)
+    implementation("androidx.browser:browser:1.8.0")
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)

@@ -17,12 +17,8 @@
 
         <activity
             android:name="com.dezdeqness.muzika.presentation.MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.Muzika">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service

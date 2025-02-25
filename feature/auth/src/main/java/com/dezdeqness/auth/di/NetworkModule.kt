@@ -1,5 +1,6 @@
-package com.dezdeqness.muzika.di.core
+package com.dezdeqness.auth.di
 
+import com.dezdeqness.auth.core.AuthConstants
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
@@ -40,7 +41,7 @@ val networkModule = module {
     single<Ktorfit> {
         Ktorfit
             .Builder()
-//            .baseUrl(Constants.Endpoints.BASE_URL)
+            .baseUrl(AuthConstants.BASE_URL)
             .httpClient(get<HttpClient>())
             .converterFactories(ResponseConverterFactory())
             .build()
