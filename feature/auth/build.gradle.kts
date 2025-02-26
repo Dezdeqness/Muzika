@@ -57,8 +57,8 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(platform(libs.compose.bom))
     implementation(libs.activity.compose)
-    implementation("androidx.browser:browser:1.8.0")
-
+    implementation(libs.androidx.browser)
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
