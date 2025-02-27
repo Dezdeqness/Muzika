@@ -30,7 +30,7 @@ jetbrainsKotlinJvm = "2.1.0"
 
 koin-bom = "4.0.0"
 
-ksp = "2.1.0-1.0.27"
+ksp = "2.2.0-1.0.27"
 kspVersion = "2.1.0-1.0.29"
 material = "1.12.0"
 datastorePreferencesVersion = "1.1.2"
@@ -102,4 +102,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
 
 [bundles]
 ktor-common = ["ktor-core", "ktor-client-encoding", "ktor-okhttp", "ktor-logging", "ktor-content-negotiation", "ktor-serialization"]
-ktorfit-common = ["ktorfit-lib", "ktorfit-converters-flow", "ktorfit-converters-response", "ktorfit-converters-call", "ktorfit-ksp"]
+ktorfit-common = ["ktorfit-lib", "ktorfit-converters-flow", "ktorfit-converters-response", "ktorfit-converters-call"]
