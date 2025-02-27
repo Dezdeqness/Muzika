@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name="com.dezdeqness.auth.presentation.ui.AuthActivity"
+            android:name="com.dezdeqness.auth.presentation.AuthActivity"
             android:exported="true"
             android:launchMode="singleTask">
 
