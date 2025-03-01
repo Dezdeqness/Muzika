@@ -3,7 +3,6 @@ package com.dezdeqness.auth.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dezdeqness.auth.core.AuthConstants
-import com.dezdeqness.auth.data.datasource.AuthDatasource
 import com.dezdeqness.auth.data.provider.AuthorizationUrlProvider
 import com.dezdeqness.auth.utils.PKCEUtils
 import kotlinx.coroutines.Dispatchers
@@ -11,12 +10,19 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import com.dezdeqness.auth.domain.usecase.LoginUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class AuthViewModel(
-    private val authDatasource: AuthDatasource,
+    private val loginUseCase: LoginUseCase,
     private val authUrlProvider: AuthorizationUrlProvider,
     private val utils: PKCEUtils,
 ) : ViewModel() {
+
+    private val _authState: MutableStateFlow<AuthState> = MutableStateFlow(AuthState())
+    val authState: StateFlow<AuthState> = _authState
 
     private val _events = Channel<AuthEvent>()
     val events = _events.receiveAsFlow()
@@ -46,14 +52,23 @@ class AuthViewModel(
             && state == secureString
             && code.isNullOrEmpty().not()
         ) {
+            _authState.update {
+                it.copy(isLoading = true)
+            }
             viewModelScope.launch(Dispatchers.IO) {
-                authDatasource
-                    .obtainToken(authCode = code, codeVerifier = verifier)
+                loginUseCase
+                    .invoke(authCode = code, codeVerifier = verifier)
                     .onSuccess {
-
+                        _authState.update {
+                            it.copy(isLoading = false)
+                        }
+                        _events.send(AuthEvent.NavigateMainFlow)
                     }
                     .onFailure {
-
+                        _authState.update {
+                            it.copy(isLoading = false)
+                        }
+                        _events.send(AuthEvent.Failure)
                     }
 
             }
@@ -67,10 +82,3 @@ class AuthViewModel(
 
 
 }
-
-//dezdeqness://
-// aqua/auth?
-// code=eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiQTI1NktXIn0.I4uQlvzbl7pvtJnq3XX77L9HBJG2da5lxmuA8UnvTGOxNx1bTSYcwA.TAc6ajjTnJ2saacIQ4cLng._Z0oNyKk8UaQpBnWKr4l2Qu1uIGNoj1zfH6GrBiOUE_Cw4cimKRHJhCSL7zGoJHFo2wNiQq944zzt12o2SbVxvJVXrYmTVGwvvYTXbC9VfuVrvSnT3fFAERlYNpVtc3ikwt_3-6XVVtldM_8FixJfKvaVHVaT-clAv_Msn12xUAvmkjNAV6gVbpldimDskKRV4ICo06YTMm3YSxX6piZwKrpTfA5Z2N2Gi7Jo5a8xD6-OfFXghpoRYKrc_ZwYrPl.n5MeIRQYJDZxkS4WpirDrg
-// &state=xyXN1Of2YnfGYiGP8i4osM3qfWO0qTHGOqutZkmrnwXexsFPjmwvDbglrQtXBAqj
-
-// dezdeqness://aqua/auth?code=eyJlbmMiRQYJDZxkS4WpirDrg&state=xyXN1Of2YwvDbglrQtXBAqj

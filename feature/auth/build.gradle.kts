@@ -45,6 +45,7 @@ android {
 dependencies {
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.ktorfit.common)
+    debugImplementation(libs.androidx.ui.tooling)
     ksp(libs.ktorfit.ksp)
     implementation(libs.okhttp.logging)
     implementation(project.dependencies.platform(libs.koin.bom))
