@@ -108,7 +108,7 @@ fun AuthPage(
                     onClick = {
                         onAuthorizeClick()
                     },
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
                         contentColor = Color(0xFF0288D1)
@@ -119,7 +119,7 @@ fun AuthPage(
 
                 OutlinedButton(
                     onClick = { onAuthorizeClick() },
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
                 ) {
                     Text("Sign Up", fontSize = 18.sp)
