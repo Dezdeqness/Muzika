@@ -7,6 +7,7 @@ import com.dezdeqness.muzika.di.core.cacheModule
 import com.dezdeqness.auth.di.networkModule
 import com.dezdeqness.auth.di.utilsModule
 import com.dezdeqness.auth.di.viewModelModule
+import com.dezdeqness.muzika.di.navigation.navigationModule
 import com.dezdeqness.muzika.di.repositoryModule
 import com.dezdeqness.muzika.di.viewmodelModule
 import org.koin.android.ext.koin.androidContext
@@ -18,6 +19,7 @@ class MuzikaApplication : Application() {
         startKoin {
             androidContext(this@MuzikaApplication)
             modules(
+                navigationModule,
                 utilsModule,
                 dataModule,
                 networkModule,

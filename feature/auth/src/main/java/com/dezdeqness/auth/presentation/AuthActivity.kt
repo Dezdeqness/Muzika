@@ -6,12 +6,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.MaterialTheme
 import androidx.core.bundle.Bundle
+import com.dezdeqness.auth.navigation.AuthNavigation
 import com.dezdeqness.auth.presentation.ui.AuthPage
 import org.koin.android.ext.android.inject
 
 class AuthActivity : AppCompatActivity() {
 
     val viewModel: AuthViewModel by inject()
+    val navigator: AuthNavigation by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +29,8 @@ class AuthActivity : AppCompatActivity() {
                         viewModel.onAuthorizedClick()
                     },
                     onNavigationMainFlow = {
-
+                        navigator.navigateToMainScreen(this)
+                        finish()
                     }
                 )
             }
