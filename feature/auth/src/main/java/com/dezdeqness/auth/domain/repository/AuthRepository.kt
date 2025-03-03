@@ -7,4 +7,5 @@ interface AuthRepository {
     suspend fun refreshToken(): Result<TokenEntity>
     suspend fun signOut(): Result<Boolean>
     suspend fun isTokenExpired(): Boolean
+    suspend fun isLoggedIn(): Boolean
 }

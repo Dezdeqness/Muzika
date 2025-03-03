@@ -59,9 +59,9 @@ dependencies {
 
     implementation(platform(libs.compose.bom))
 
-    implementation(libs.appcompat)
+    api(libs.appcompat)
 
-    implementation(libs.core.ktx)
+    api(libs.core.ktx)
     implementation(project(":feature:auth"))
 
     implementation(libs.lifecycle.runtime.ktx)
@@ -89,10 +89,6 @@ dependencies {
     implementation(libs.pod.core)
 
     implementation(libs.core.ui)
-
-    api(libs.bundles.ktor.common)
-    api(libs.bundles.ktorfit.common)
-    api(libs.okhttp.logging)
 
     implementation(libs.koin.core)
     implementation(libs.koin.compose)

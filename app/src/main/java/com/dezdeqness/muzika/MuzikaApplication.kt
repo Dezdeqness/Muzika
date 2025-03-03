@@ -2,6 +2,7 @@ package com.dezdeqness.muzika
 
 import android.app.Application
 import com.dezdeqness.auth.di.dataModule
+import com.dezdeqness.auth.di.domainModule
 import com.dezdeqness.muzika.di.core.appModule
 import com.dezdeqness.muzika.di.core.cacheModule
 import com.dezdeqness.auth.di.networkModule
@@ -22,6 +23,7 @@ class MuzikaApplication : Application() {
                 navigationModule,
                 utilsModule,
                 dataModule,
+                domainModule,
                 networkModule,
                 viewModelModule,
                 appModule,

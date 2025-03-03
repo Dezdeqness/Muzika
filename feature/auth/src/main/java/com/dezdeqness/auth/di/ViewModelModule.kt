@@ -9,6 +9,7 @@ val viewModelModule = module {
         AuthViewModel(
             loginUseCase = get(),
             authUrlProvider = get(),
+            authRepository = get(),
             utils = get()
         )
     }

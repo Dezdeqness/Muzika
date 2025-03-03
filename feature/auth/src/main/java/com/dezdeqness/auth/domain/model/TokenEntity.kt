@@ -12,6 +12,11 @@ data class TokenEntity(
             return currentTime >= createdIn + expiresIn + TIME_SHIFT
         }
 
+    val isDataValid: Boolean
+        get() {
+            return accessToken.isNotEmpty() && refreshToken.isNotEmpty()
+        }
+
     companion object {
         private const val TIME_SHIFT = 60
     }

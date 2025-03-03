@@ -10,13 +10,16 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import com.dezdeqness.auth.domain.repository.AuthRepository
 import com.dezdeqness.auth.domain.usecase.LoginUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class AuthViewModel(
     private val loginUseCase: LoginUseCase,
+    private val authRepository: AuthRepository,
     private val authUrlProvider: AuthorizationUrlProvider,
     private val utils: PKCEUtils,
 ) : ViewModel() {
@@ -31,7 +34,25 @@ class AuthViewModel(
     private var challenge = ""
     private var secureString = ""
 
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (authRepository.isLoggedIn()) {
+                delay(1000)
+                _events.send(AuthEvent.NavigateMainFlow)
+            } else {
+                _authState.update {
+                    it.copy(
+                        state = ScreenState.NotLoggedIn,
+                        isLoading = false,
+                    )
+                }
+            }
+        }
+    }
+
     fun onAuthorizedClick() {
+        if (_authState.value.isLoading) return
+
         verifier = utils.generateCodeVerifier()
         challenge = utils.generateCodeChallenge(verifier)
         secureString = utils.randomString(64)
