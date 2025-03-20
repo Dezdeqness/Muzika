@@ -1,13 +1,9 @@
 package com.dezdeqness.muzika
 
 import android.app.Application
-import com.dezdeqness.auth.di.dataModule
-import com.dezdeqness.auth.di.domainModule
+import com.dezdeqness.auth.di.authModule
 import com.dezdeqness.muzika.di.core.appModule
 import com.dezdeqness.muzika.di.core.cacheModule
-import com.dezdeqness.auth.di.networkModule
-import com.dezdeqness.auth.di.utilsModule
-import com.dezdeqness.auth.di.viewModelModule
 import com.dezdeqness.muzika.di.navigation.navigationModule
 import com.dezdeqness.muzika.di.repositoryModule
 import com.dezdeqness.muzika.di.viewmodelModule
@@ -21,15 +17,11 @@ class MuzikaApplication : Application() {
             androidContext(this@MuzikaApplication)
             modules(
                 navigationModule,
-                utilsModule,
-                dataModule,
-                domainModule,
-                networkModule,
-                viewModelModule,
                 appModule,
                 cacheModule,
                 repositoryModule,
-                viewmodelModule
+                viewmodelModule,
+                authModule,
             )
         }
     }

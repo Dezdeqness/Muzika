@@ -4,7 +4,7 @@ import com.dezdeqness.auth.presentation.AuthViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val viewModelModule = module {
+internal val viewModelModule = module {
     viewModel {
         AuthViewModel(
             loginUseCase = get(),

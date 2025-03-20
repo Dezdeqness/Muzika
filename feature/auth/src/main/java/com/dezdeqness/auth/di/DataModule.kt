@@ -12,7 +12,7 @@ import com.dezdeqness.auth.domain.repository.AuthRepository
 import de.jensklingenberg.ktorfit.Ktorfit
 import org.koin.dsl.module
 
-val dataModule = module {
+internal val dataModule = module {
     single {
         AuthorizationUrlProvider()
     }
