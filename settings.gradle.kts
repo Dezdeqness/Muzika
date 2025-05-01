@@ -38,3 +38,6 @@ dependencyResolutionManagement {
 rootProject.name = "Aqua"
 include(":app")
 include(":feature:auth")
+include(":feature:likedtracks")
+include(":common:core-network")
+
