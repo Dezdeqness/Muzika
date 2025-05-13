@@ -1,4 +1,4 @@
-package com.dezdeqness.core.network.data
+package com.dezdeqness.core.network.data.interceptors
 
 import com.dezdeqness.core.network.domain.IsRefreshedTokenUseCase
 import com.dezdeqness.core.network.domain.RetrieveAccessTokenUseCase

@@ -1,7 +1,7 @@
 package com.dezdeqness.core.network.di
 
-import com.dezdeqness.core.network.data.AuthTokenInterceptor
-import com.dezdeqness.core.network.data.RefreshTokenInterceptor
+import com.dezdeqness.core.network.data.interceptors.AuthTokenInterceptor
+import com.dezdeqness.core.network.data.interceptors.RefreshTokenInterceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -14,7 +14,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
-internal val coreNetworkModule = module {
+val coreNetworkModule = module {
     single<Json> {
         Json {
             ignoreUnknownKeys = true
