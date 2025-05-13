@@ -40,4 +40,5 @@ include(":app")
 include(":feature:auth")
 include(":feature:likedtracks")
 include(":common:core-network")
+include(":shared-data")
 

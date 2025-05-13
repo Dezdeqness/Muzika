@@ -29,12 +29,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.toString()
-    }
 
     kotlinOptions {
         jvmTarget = "17"
@@ -49,7 +43,6 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.core.ktx)
-    implementation(libs.material)
     implementation(libs.corutines)
     testImplementation(libs.junit)
 }

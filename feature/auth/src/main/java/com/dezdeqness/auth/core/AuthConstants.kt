@@ -2,6 +2,7 @@ package com.dezdeqness.auth.core
 
 object AuthConstants {
     const val BASE_URL = "https://secure.soundcloud.com/"
+    const val API_URL = "https://api.soundcloud.com/"
     const val API_TOKEN = "oauth/token"
     const val API_SIGN_OUT = "sign-out"
     const val AUTHORIZE_URL = "authorize"
