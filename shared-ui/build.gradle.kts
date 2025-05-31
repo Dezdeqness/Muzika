@@ -2,12 +2,10 @@ plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    id("de.jensklingenberg.ktorfit") version "2.2.0"
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.dezdeqness.likedtracks"
+    namespace = "com.dezdeqness.shared.ui"
     compileSdk = 35
 
     defaultConfig {
@@ -37,13 +35,9 @@ android {
 }
 
 dependencies {
-    implementation(libs.bundles.ktor.common)
-    implementation(libs.bundles.ktorfit.common)
-    ksp(libs.ktorfit.ksp)
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.compose.navigation)
     implementation(libs.ui)
     implementation(libs.ui.util)
     implementation(libs.ui.graphics)
@@ -51,15 +45,5 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.ui.tooling.preview)
     implementation(platform(libs.compose.bom))
-    implementation(project.dependencies.platform(libs.koin.bom))
-    implementation(libs.koin.core)
-    implementation(libs.koin.compose)
-    implementation(libs.koin.compose.viewmodel)
-    implementation(libs.koin.android)
-    implementation(project(":common:core-network"))
-    implementation(project(":shared-data"))
-    implementation(project(":shared-ui"))
     implementation(libs.coil)
-
-    testImplementation(libs.junit)
 }

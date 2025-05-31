@@ -1,4 +1,4 @@
-package com.dezdeqness.muzika.core.ui
+package com.dezdeqness.shared.ui
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,14 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import coil.compose.AsyncImage
-import com.dezdeqness.muzika.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -41,14 +40,11 @@ fun ContentTile(
     title: String,
     subTitle: String,
     iconUrl: String,
-    isDownloaded: Boolean,
-    isPlaying: Boolean,
-    isCurrentlyPlaying: Boolean,
+    isDownloaded: Boolean = false,
+    isPlaying: Boolean = false,
+    isCurrentlyPlaying: Boolean = false,
     onMoreClicked: () -> Unit,
-    titleStyle: TextStyle? = null,
-    subTitleStyle: TextStyle? = null,
 ) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
@@ -60,7 +56,7 @@ fun ContentTile(
                 contentDescription = null,
                 modifier = Modifier
                     .padding(8.dp)
-                    .size(48.dp)
+                    .size(60.dp)
                     .clip(RoundedCornerShape(4.dp)),
             )
             if (isPlaying && isCurrentlyPlaying) {
@@ -84,9 +80,7 @@ fun ContentTile(
                 }
 
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        2.dp,
-                    ),
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
                     verticalAlignment = Alignment.Bottom,
                     modifier = Modifier.size(24.dp),
                 ) {
@@ -96,30 +90,26 @@ fun ContentTile(
                                 .width(6.dp)
                                 .height(item.value * 16.dp)
                                 .clip(RoundedCornerShape(2.dp))
-                                .background(Color.White)
-                        ) {}
+                                .background(Color.Blue)
+                        )
                     }
                 }
             }
         }
 
-        Column(
-            modifier = Modifier.weight(1f),
-        ) {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 title,
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 maxLines = 1,
-                color = Color.White,
+                color = Color.Black,
                 overflow = TextOverflow.Ellipsis,
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 if (isDownloaded) {
                     Icon(
                         painterResource(id = R.drawable.ic_download_offline),
-                        tint = Color.White,
+                        tint = Color.Black,
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp)
@@ -129,9 +119,8 @@ fun ContentTile(
 
                 Text(
                     subTitle,
-                    fontSize = 16.sp,
+                    fontSize = 12.sp,
                     maxLines = 1,
-                    color = Color(0x66FFFFFF),
                     overflow = TextOverflow.Ellipsis,
                 )
             }
@@ -144,7 +133,7 @@ fun ContentTile(
         ) {
             Icon(
                 painterResource(id = R.drawable.ic_more),
-                tint = Color.White,
+                tint = Color.Black,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
             )
@@ -159,21 +148,20 @@ fun ContentTile(
 )
 @Composable
 fun ContentTilePreview() {
-    ContentTile(
-        title = "Landmine",
-        subTitle = "Three Days Grace",
-        iconUrl = "https://thicc.mywaifulist.moe/pending/waifus/xtW1KUiJlD3LTH2arqNTUlKYofAfzTm6RexN9jdA.jpg",
-        isDownloaded = true,
-        onMoreClicked = {
+    MaterialTheme {
+        ContentTile(
+            title = "Landmine",
+            subTitle = "Three Days Grace",
+            iconUrl = "https://thicc.mywaifulist.moe/pending/waifus/xtW1KUiJlD3LTH2arqNTUlKYofAfzTm6RexN9jdA.jpg",
+            isDownloaded = true,
+            onMoreClicked = {
 
-        },
-        isCurrentlyPlaying = true,
-        isPlaying = true,
-        modifier = Modifier
-            .width(320.dp)
-            .clip((RoundedCornerShape(12.dp)))
-            .clickable {
-
-            }
-    )
+            },
+            isCurrentlyPlaying = true,
+            isPlaying = true,
+            modifier = Modifier
+                .width(320.dp)
+                .clip((RoundedCornerShape(12.dp)))
+        )
+    }
 }

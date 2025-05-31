@@ -41,4 +41,5 @@ include(":feature:auth")
 include(":feature:likedtracks")
 include(":common:core-network")
 include(":shared-data")
+include(":shared-ui")
 
