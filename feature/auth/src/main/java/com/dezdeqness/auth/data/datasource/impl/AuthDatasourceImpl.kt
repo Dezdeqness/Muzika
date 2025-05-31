@@ -42,6 +42,7 @@ class AuthDatasourceImpl(
             map = mapOf(
                 "grant_type" to "refresh_token",
                 "client_id" to AuthConstants.CLIENT_ID,
+                "client_secret" to AuthConstants.CLIENT_SECRET,
                 "refresh_token" to refreshToken,
             )
         )
@@ -49,8 +50,7 @@ class AuthDatasourceImpl(
             val body = response.body()
                 ?: return@tryWithCatch Result.failure(Throwable("Code: ${response.code}\nError: ${response.errorBody()}"))
 
-
-            Result.success(TokenEntity("", "", 0, 0))
+            Result.success(tokenDataMapper.from(body))
 
         } else {
             // TODO: custom APIException

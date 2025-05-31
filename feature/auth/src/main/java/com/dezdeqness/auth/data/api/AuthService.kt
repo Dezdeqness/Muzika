@@ -25,7 +25,7 @@ interface AuthService {
         @Header("accept") accept: String = "application/json; charset=utf-8",
         @Header("Content-Type") contentType: String = "application/x-www-form-urlencoded",
         @FieldMap map: Map<String, Any>,
-    ): Response<Any>
+    ): Response<TokenAPI>
 
     @POST(API_SIGN_OUT)
     suspend fun signOut(): Response<Any>

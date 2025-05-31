@@ -17,7 +17,7 @@ internal val dataModule = module {
         AuthorizationUrlProvider()
     }
     single<AuthService> {
-        get<Ktorfit>().createAuthService()
+        get<Ktorfit>(authKtorfitQualified).createAuthService()
     }
 
     single<AuthDatasource> {
