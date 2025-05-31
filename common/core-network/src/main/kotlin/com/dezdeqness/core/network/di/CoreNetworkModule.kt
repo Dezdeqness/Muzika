@@ -1,12 +1,17 @@
 package com.dezdeqness.core.network.di
 
+import com.dezdeqness.core.network.core.CoreConstants
 import com.dezdeqness.core.network.data.interceptors.AuthTokenInterceptor
 import com.dezdeqness.core.network.data.interceptors.RefreshTokenInterceptor
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.HttpRequestPipeline
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -24,6 +29,19 @@ val coreNetworkModule = module {
         }
     }
 
+    single {
+        AuthTokenInterceptor(
+            useCase = get()
+        )
+    }
+
+    single {
+        RefreshTokenInterceptor(
+            isRefreshedTokenUseCase = get(),
+            retrieveAccessTokenUseCase = get(),
+        )
+    }
+
     single<HttpClient>(qualifier = Qualifiers.defaultClientQualifier) {
         HttpClient {
             install(ContentNegotiation) {
@@ -31,6 +49,7 @@ val coreNetworkModule = module {
             }
             install(Logging) {
                 level = LogLevel.ALL
+                logger = Logger.Companion.SIMPLE
             }
             defaultRequest {
                 contentType(ContentType.Application.Json)
@@ -45,16 +64,27 @@ val coreNetworkModule = module {
             }
             install(Logging) {
                 level = LogLevel.ALL
+                logger = Logger.Companion.SIMPLE
             }
             defaultRequest {
                 contentType(ContentType.Application.Json)
             }
         }.apply {
             requestPipeline.intercept(HttpRequestPipeline.State) {
-                get<AuthTokenInterceptor>().intercept(context)
                 get<RefreshTokenInterceptor>().intercept(context)
+                get<AuthTokenInterceptor>().intercept(context)
                 proceed()
             }
         }
     }
+
+    single<Ktorfit>(qualifier = Qualifiers.sharedKtorfitQualified) {
+        Ktorfit
+            .Builder()
+            .baseUrl(CoreConstants.API_URL)
+            .httpClient(get<HttpClient>(Qualifiers.withAuthClientQualifier))
+            .converterFactories(ResponseConverterFactory())
+            .build()
+    }
+
 }

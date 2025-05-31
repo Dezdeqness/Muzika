@@ -11,7 +11,7 @@ class AuthTokenInterceptor(
         useCase
             .invoke()
             .onSuccess { token ->
-                builder.header("Authorization", "Bearer $token")
+                builder.header("Authorization", "OAuth $token")
             }
     }
 }
