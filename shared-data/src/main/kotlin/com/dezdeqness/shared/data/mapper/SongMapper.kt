@@ -3,6 +3,7 @@ package com.dezdeqness.shared.data.mapper
 import com.dezdeqness.shared.data.models.SongRemote
 import com.dezdeqness.shared.domain.models.SongEntity
 import com.dezdeqness.shared.domain.models.SongKind
+import com.dezdeqness.shared.domain.models.SongUserEntity
 
 class SongMapper {
 
@@ -19,9 +20,9 @@ class SongMapper {
                 genre = genre,
                 title = title,
                 description = description,
-                releaseYear = releaseYear,
-                releaseMonth = releaseMonth,
-                releaseDay = releaseDay,
+                releaseYear = releaseYear ?: 0,
+                releaseMonth = releaseMonth ?: 0,
+                releaseDay = releaseDay ?: 0,
                 uri = uri,
                 permalinkUrl = permalinkUrl,
                 artworkUrl = artworkUrl,
@@ -33,6 +34,10 @@ class SongMapper {
                 downloadCount = downloadCount,
                 favoriteCount = favoriteCount,
                 repostsCount = repostsCount,
+                userEntity = SongUserEntity(
+                    id = data.user.id,
+                    userName = data.user.userName,
+                )
             )
         }
     }

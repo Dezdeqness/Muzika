@@ -11,25 +11,26 @@ data class SongRemote(
     @SerialName("created_at")
     val createdAt: String,
     val duration: Long,
+    @SerialName("comment_count")
     val commentCount: Long,
     @SerialName("tag_list")
     val tagList: String,
-    val genre: String,
+    val genre: String?,
     val title: String,
-    val description: String,
+    val description: String?,
     @SerialName("release_year")
-    val releaseYear: Long,
+    val releaseYear: Long?,
     @SerialName("release_month")
-    val releaseMonth: Long,
+    val releaseMonth: Long?,
     @SerialName("release_day")
-    val releaseDay: Long,
+    val releaseDay: Long?,
     val uri: String,
     @SerialName("permalink_url")
     val permalinkUrl: String,
     @SerialName("artwork_url")
-    val artworkUrl: String,
+    val artworkUrl: String?,
     @SerialName("stream_url")
-    val streamUrl: String,
+    val streamUrl: String?,
     @SerialName("download_url")
     val downloadUrl: String?,
     @SerialName("waveform_url")
@@ -44,4 +45,12 @@ data class SongRemote(
     val favoriteCount: Long,
     @SerialName("reposts_count")
     val repostsCount: Long,
+    val user: SongUserRemote,
+)
+
+@Serializable
+data class SongUserRemote(
+    val id: Long,
+    @SerialName("username")
+    val userName: String,
 )
