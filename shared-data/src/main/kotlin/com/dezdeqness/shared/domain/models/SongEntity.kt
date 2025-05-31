@@ -1,0 +1,28 @@
+package com.dezdeqness.shared.domain.models
+
+data class SongEntity(
+    val kind: SongKind,
+    val id: Long,
+    val urn: String,
+    val createdAt: String,
+    val duration: Long,
+    val commentCount: Long,
+    val tags: List<String>,
+    val genre: String,
+    val title: String,
+    val description: String,
+    val releaseYear: Long,
+    val releaseMonth: Long,
+    val releaseDay: Long,
+    val uri: String,
+    val permalinkUrl: String,
+    val artworkUrl: String,
+    val streamUrl: String,
+    val downloadUrl: String?,
+    val waveformUrl: String,
+    val userPlaybackCount: Long,
+    val playbackCount: Long,
+    val downloadCount: Long,
+    val favoriteCount: Long,
+    val repostsCount: Long,
+)

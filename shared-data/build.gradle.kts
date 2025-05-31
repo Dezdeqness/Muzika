@@ -18,4 +18,6 @@ kotlin {
 
 dependencies {
     implementation(libs.kotlinx.serialization)
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
 }
