@@ -70,6 +70,7 @@ dependencies {
     testImplementation(libs.junit)
 
     implementation(project(":common:core-network"))
+    implementation(project(":common:core"))
 
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -10,6 +10,7 @@ internal val viewModelModule = module {
             loginUseCase = get(),
             authUrlProvider = get(),
             authRepository = get(),
+            coroutineDispatcherProvider = get(),
             utils = get()
         )
     }

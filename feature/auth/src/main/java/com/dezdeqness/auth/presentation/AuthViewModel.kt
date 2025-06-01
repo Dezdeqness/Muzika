@@ -5,13 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.dezdeqness.auth.core.AuthConstants
 import com.dezdeqness.auth.data.provider.AuthorizationUrlProvider
 import com.dezdeqness.auth.utils.PKCEUtils
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import com.dezdeqness.auth.domain.repository.AuthRepository
 import com.dezdeqness.auth.domain.usecase.LoginUseCase
+import com.dezdeqness.core.coroutines.CoroutineDispatcherProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +21,7 @@ class AuthViewModel(
     private val loginUseCase: LoginUseCase,
     private val authRepository: AuthRepository,
     private val authUrlProvider: AuthorizationUrlProvider,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val utils: PKCEUtils,
 ) : ViewModel() {
 
@@ -35,7 +36,7 @@ class AuthViewModel(
     private var secureString = ""
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             if (authRepository.isLoggedIn()) {
                 delay(1000)
                 _events.send(AuthEvent.NavigateMainFlow)
@@ -76,7 +77,7 @@ class AuthViewModel(
             _authState.update {
                 it.copy(isLoading = true)
             }
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(coroutineDispatcherProvider.io()) {
                 loginUseCase
                     .invoke(authCode = code, codeVerifier = verifier)
                     .onSuccess {
@@ -100,6 +101,5 @@ class AuthViewModel(
         private const val CODE_KEY = "code"
         private const val STATE_KEY = "state"
     }
-
 
 }

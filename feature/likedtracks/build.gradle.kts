@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.android)
     implementation(project(":common:core-network"))
+    implementation(project(":common:core"))
     implementation(project(":shared-data"))
     implementation(project(":shared-ui"))
     implementation(libs.coil)

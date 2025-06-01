@@ -67,6 +67,7 @@ dependencies {
     implementation(project(":shared-data"))
     implementation(project(":shared-ui"))
     implementation(project(":common:core-network"))
+    implementation(project(":common:core"))
 
     implementation(libs.lifecycle.runtime.ktx)
 

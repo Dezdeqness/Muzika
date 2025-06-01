@@ -2,9 +2,9 @@ package com.dezdeqness.likedtracks.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dezdeqness.core.coroutines.CoroutineDispatcherProvider
 import com.dezdeqness.likedtracks.domain.LikedRepository
 import com.dezdeqness.likedtracks.presentation.mapper.LikedTrackMapper
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 class LikedTracksViewModel(
     private val likedRepository: LikedRepository,
     private val likedTrackMapper: LikedTrackMapper,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
 ) : ViewModel() {
 
     val likedTracks =
@@ -32,7 +33,7 @@ class LikedTracksViewModel(
                     emit(LikedTracksState(status = StateStatus.Error))
                 }
         }
-            .flowOn(Dispatchers.IO)
+            .flowOn(coroutineDispatcherProvider.io())
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),

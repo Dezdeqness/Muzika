@@ -1,4 +1,4 @@
-package com.dezdeqness.muzika.core
+package com.dezdeqness.core.coroutines
 
 import kotlinx.coroutines.CoroutineDispatcher
 
