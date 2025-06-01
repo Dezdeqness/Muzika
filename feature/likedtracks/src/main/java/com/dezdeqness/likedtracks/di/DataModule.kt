@@ -1,5 +1,6 @@
 package com.dezdeqness.likedtracks.di
 
+import com.dezdeqness.core.network.di.Qualifiers
 import com.dezdeqness.likedtracks.data.api.LikedService
 import com.dezdeqness.likedtracks.data.api.createLikedService
 import com.dezdeqness.likedtracks.data.datasource.LikedSongDataSource
@@ -11,7 +12,7 @@ import org.koin.dsl.module
 
 internal val dataModule = module {
     single<LikedService> {
-        get<Ktorfit>().createLikedService()
+        get<Ktorfit>(Qualifiers.sharedKtorfitQualified).createLikedService()
     }
 
     single<LikedSongDataSource> {

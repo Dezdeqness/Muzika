@@ -34,6 +34,7 @@ class SongMapper {
                 downloadCount = downloadCount,
                 favoriteCount = favoriteCount,
                 repostsCount = repostsCount,
+                metadataArtist = metadataArtist,
                 userEntity = SongUserEntity(
                     id = data.user.id,
                     userName = data.user.userName,

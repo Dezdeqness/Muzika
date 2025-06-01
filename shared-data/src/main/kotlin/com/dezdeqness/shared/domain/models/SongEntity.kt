@@ -25,5 +25,6 @@ data class SongEntity(
     val downloadCount: Long,
     val favoriteCount: Long,
     val repostsCount: Long,
+    val metadataArtist: String?,
     val userEntity: SongUserEntity,
 )

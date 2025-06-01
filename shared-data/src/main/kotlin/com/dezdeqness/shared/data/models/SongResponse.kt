@@ -45,6 +45,8 @@ data class SongRemote(
     val favoriteCount: Long,
     @SerialName("reposts_count")
     val repostsCount: Long,
+    @SerialName("metadata_artist")
+    val metadataArtist: String?,
     val user: SongUserRemote,
 )
 

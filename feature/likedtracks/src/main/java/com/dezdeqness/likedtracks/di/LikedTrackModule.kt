@@ -4,6 +4,7 @@ import org.koin.dsl.module
 
 val likedTracksModule = module {
     includes(
-        dataModule
+        dataModule,
+        viewModelModule
     )
 }

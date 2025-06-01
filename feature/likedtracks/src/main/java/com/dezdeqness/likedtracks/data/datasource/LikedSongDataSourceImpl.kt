@@ -10,7 +10,10 @@ class LikedSongDataSourceImpl(
 
     override suspend fun getLikedSongs() = tryWithCatch {
         val response = likedService.liked(
-            map = mapOf()
+            map = mapOf(
+                "limit" to 20,
+                "linked_partitioning" to true,
+            )
         )
 
         if (response.isSuccessful) {
