@@ -22,8 +22,8 @@ navigation = "2.8.7"
 dagger = "2.51.1"
 hiltNavigation = "1.2.0"
 
-supportCoreUiVersion = "0.1.0"
-podCoreVersion = "0.2.0"
+supportCoreUiVersion = "0.2.1"
+supportCoreVersion = "0.1.1"
 
 kotlinCompilerExtensionVersion = "1.5.14"
 jetbrainsKotlinJvm = "2.1.0"
@@ -83,7 +83,7 @@ compose-navigation = { module = "androidx.navigation:navigation-compose", versio
 hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
 core-ui = { module = "com.dezdeqness.support:core-ui", version.ref = "supportCoreUiVersion" }
-pod-core = { module = "com.dezdeqness.pod:core", version.ref = "podCoreVersion" }
+core = { module = "com.dezdeqness.support:core", version.ref = "supportCoreVersion" }
 
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }

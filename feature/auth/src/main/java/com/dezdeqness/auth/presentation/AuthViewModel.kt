@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import com.dezdeqness.auth.domain.repository.AuthRepository
 import com.dezdeqness.auth.domain.usecase.LoginUseCase
-import com.dezdeqness.core.coroutines.CoroutineDispatcherProvider
+import com.dezdeqness.core.dispatcher.CoroutineDispatcherProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

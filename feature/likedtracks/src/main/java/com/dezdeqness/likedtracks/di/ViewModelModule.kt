@@ -14,6 +14,7 @@ internal val viewModelModule = module {
         LikedTracksViewModel(
             likedRepository = get(),
             likedTrackMapper = get(),
+            coroutineDispatcherProvider = get(),
         )
     }
 }

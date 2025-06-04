@@ -39,5 +39,6 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.core.ktx)
     implementation(libs.corutines)
+    api(libs.core)
     testImplementation(libs.junit)
 }

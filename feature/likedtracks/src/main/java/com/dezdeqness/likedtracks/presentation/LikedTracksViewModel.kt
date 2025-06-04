@@ -2,7 +2,7 @@ package com.dezdeqness.likedtracks.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dezdeqness.core.coroutines.CoroutineDispatcherProvider
+import com.dezdeqness.core.dispatcher.CoroutineDispatcherProvider
 import com.dezdeqness.likedtracks.domain.LikedRepository
 import com.dezdeqness.likedtracks.presentation.mapper.LikedTrackMapper
 import kotlinx.coroutines.flow.SharingStarted
