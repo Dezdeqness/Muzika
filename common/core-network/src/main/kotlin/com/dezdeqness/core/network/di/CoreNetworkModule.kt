@@ -38,7 +38,6 @@ val coreNetworkModule = module {
     single {
         RefreshTokenInterceptor(
             isRefreshedTokenUseCase = get(),
-            retrieveAccessTokenUseCase = get(),
         )
     }
 
@@ -71,7 +70,7 @@ val coreNetworkModule = module {
             }
         }.apply {
             requestPipeline.intercept(HttpRequestPipeline.State) {
-                get<RefreshTokenInterceptor>().intercept(context)
+                get<RefreshTokenInterceptor>().intercept()
                 get<AuthTokenInterceptor>().intercept(context)
                 proceed()
             }
