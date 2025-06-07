@@ -1,6 +1,7 @@
-package com.dezdeqness.muzika.service
+package com.dezdeqness.core.player.service
 
 import android.net.Uri
+import androidx.annotation.OptIn
 import androidx.core.net.toUri
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
@@ -16,7 +17,7 @@ import androidx.media3.session.MediaSessionService
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 
-@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+@OptIn(androidx.media3.common.util.UnstableApi::class)
 class MusicService : MediaSessionService(), MediaSession.Callback {
 
     val playerCache: SimpleCache by inject(named("PlayerCache"))

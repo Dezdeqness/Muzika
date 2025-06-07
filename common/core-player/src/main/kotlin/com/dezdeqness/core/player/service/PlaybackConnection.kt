@@ -1,4 +1,4 @@
-package com.dezdeqness.muzika.service
+package com.dezdeqness.core.player.service
 
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player

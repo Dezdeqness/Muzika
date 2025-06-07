@@ -68,6 +68,7 @@ dependencies {
     implementation(project(":shared-ui"))
     implementation(project(":common:core-network"))
     implementation(project(":common:core"))
+    implementation(project(":common:core-player"))
 
     implementation(libs.lifecycle.runtime.ktx)
 
@@ -86,11 +87,6 @@ dependencies {
     implementation(libs.viewmodel.compose)
     implementation(libs.viewmodel.runtime)
     implementation(libs.viewmodel.saved.state)
-
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
-    implementation(libs.media3.common)
-    implementation(libs.media3.session)
 
     implementation(libs.core.ui)
 

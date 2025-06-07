@@ -1,4 +1,4 @@
-package com.dezdeqness.muzika.presentation.features.player
+package com.dezdeqness.player.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

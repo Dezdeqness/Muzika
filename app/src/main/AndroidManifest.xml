@@ -21,7 +21,7 @@
         </activity>
 
         <service
-            android:name=".service.MusicService"
+            android:name="com.dezdeqness.core.player.service.MusicService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>
