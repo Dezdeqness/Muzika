@@ -63,12 +63,12 @@ dependencies {
 
     api(libs.core.ktx)
     implementation(project(":feature:auth"))
+    implementation(project(":feature:player"))
     implementation(project(":feature:likedtracks"))
     implementation(project(":shared-data"))
     implementation(project(":shared-ui"))
     implementation(project(":common:core-network"))
     implementation(project(":common:core"))
-    implementation(project(":common:core-player"))
 
     implementation(libs.lifecycle.runtime.ktx)
 

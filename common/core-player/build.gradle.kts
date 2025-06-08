@@ -44,8 +44,9 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.corutines)
 
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
-    implementation(libs.media3.common)
-    implementation(libs.media3.session)
+    api(libs.media3.exoplayer)
+    api(libs.media3.ui)
+    api(libs.media3.common)
+    api(libs.media3.session)
+    implementation(libs.androidx.runtime.android)
 }
