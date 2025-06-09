@@ -76,28 +76,29 @@ class MusicService : MediaSessionService(), MediaSession.Callback {
         ) { dataSpec ->
             val mediaId = dataSpec.key ?: error("No media id")
 
-            if (downloaderCache.isCached(
-                    mediaId,
-                    dataSpec.position,
-                    if (dataSpec.length >= 0) dataSpec.length else 1
-                ) ||
-                playerCache.isCached(mediaId, dataSpec.position, 512 * 1024L)
-            ) {
-                return@Factory dataSpec
-            }
-
-            songUrlCache[mediaId]?.takeIf { it.second < System.currentTimeMillis() }?.let {
-                return@Factory dataSpec.withUri(it.first.toUri())
-            }
+//            if (downloaderCache.isCached(
+//                    mediaId,
+//                    dataSpec.position,
+//                    if (dataSpec.length >= 0) dataSpec.length else 1
+//                ) ||
+//                playerCache.isCached(mediaId, dataSpec.position, 512 * 1024L)
+//            ) {
+//                return@Factory dataSpec
+//            }
+//
+//            songUrlCache[mediaId]?.takeIf { it.second < System.currentTimeMillis() }?.let {
+//                return@Factory dataSpec.withUri(it.first.toUri())
+//            }
 
             // refresh possible needed, also in case of missed url
             // need to fetch API request
             val token = runBlocking(Dispatchers.IO) {
                 retrieveAccessTokenUseCase.invoke().getOrNull()
             }
-
+            val maxChunkSize = 512 * 1024L
+            val length = if (dataSpec.length > 0) dataSpec.length else maxChunkSize
             dataSpec.withUri(dataSpec.uri)
-                .subrange(dataSpec.uriPositionOffset, 512 * 1024L)
+                .subrange(dataSpec.uriPositionOffset, length)
                 .withAdditionalHeaders(
                     mapOf(
                         "Authorization" to "OAuth $token"

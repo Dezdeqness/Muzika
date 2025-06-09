@@ -5,4 +5,5 @@ data class LikedTrackUiModel(
     val name: String,
     val authorName: String,
     val iconImageUrl: String,
+    val streamUrl: String,
 )

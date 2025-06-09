@@ -13,6 +13,7 @@ class LikedSongDataSourceImpl(
             map = mapOf(
                 "limit" to 20,
                 "linked_partitioning" to true,
+                "access" to "playable",
             )
         )
 
