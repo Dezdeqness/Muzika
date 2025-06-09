@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     id("de.jensklingenberg.ktorfit") version "2.2.0"
     alias(libs.plugins.kotlin.serialization)
 }
@@ -23,6 +24,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    buildFeatures {
+        compose = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -54,4 +58,5 @@ dependencies {
     api(project(":common:core-player"))
     implementation(project(":common:core"))
     implementation(project(":shared-ui"))
+    implementation(libs.coil)
 }

@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.core.ktx)
     implementation(libs.corutines)
+    implementation(project(":common:core-network"))
 
     api(libs.media3.exoplayer)
     api(libs.media3.ui)

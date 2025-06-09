@@ -1,6 +1,5 @@
 package com.dezdeqness.core.player.service
 
-import android.net.Uri
 import androidx.annotation.OptIn
 import androidx.core.net.toUri
 import androidx.media3.common.AudioAttributes
@@ -14,6 +13,9 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import com.dezdeqness.core.network.domain.RetrieveAccessTokenUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 
@@ -23,6 +25,8 @@ class MusicService : MediaSessionService(), MediaSession.Callback {
     val playerCache: SimpleCache by inject(named("PlayerCache"))
 
     val downloaderCache: SimpleCache by inject(named("DownloadCache"))
+
+    val retrieveAccessTokenUseCase: RetrieveAccessTokenUseCase by inject()
 
     private var mediaSession: MediaSession? = null
 
@@ -86,7 +90,19 @@ class MusicService : MediaSessionService(), MediaSession.Callback {
                 return@Factory dataSpec.withUri(it.first.toUri())
             }
 
-            dataSpec.withUri(Uri.EMPTY).subrange(dataSpec.uriPositionOffset, 512 * 1024L)
+            // refresh possible needed, also in case of missed url
+            // need to fetch API request
+            val token = runBlocking(Dispatchers.IO) {
+                retrieveAccessTokenUseCase.invoke().getOrNull()
+            }
+
+            dataSpec.withUri(dataSpec.uri)
+                .subrange(dataSpec.uriPositionOffset, 512 * 1024L)
+                .withAdditionalHeaders(
+                    mapOf(
+                        "Authorization" to "OAuth $token"
+                    )
+                )
         }
     }
 

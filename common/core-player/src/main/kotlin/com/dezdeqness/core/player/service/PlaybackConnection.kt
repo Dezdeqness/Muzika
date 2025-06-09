@@ -42,4 +42,10 @@ class PlaybackConnection(
     fun dispose() {
         mediaController.removeListener(this)
     }
+
+    fun startPlay(mediaItem: MediaItem) {
+        mediaController.setMediaItems(listOf(mediaItem))
+        mediaController.prepare()
+        mediaController.playWhenReady = true
+    }
 }
