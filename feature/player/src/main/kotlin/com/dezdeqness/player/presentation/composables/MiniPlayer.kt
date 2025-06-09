@@ -1,4 +1,4 @@
-package com.dezdeqness.player.presentation
+package com.dezdeqness.player.presentation.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.Player
 import coil.compose.AsyncImage
-import com.dezdeqness.muzika.R
-import com.dezdeqness.muzika.presentation.LocalPlaybackConnection
+import com.dezdeqness.core.player.locals.LocalPlaybackConnection
+import com.dezdeqness.shared.ui.R
 import kotlinx.coroutines.delay
 
 @Composable
@@ -54,7 +54,7 @@ fun MiniPlayer(
     LaunchedEffect(playBackSate) {
         if (playBackSate == Player.STATE_READY) {
             while (true) {
-                delay(700)
+                delay(500)
                 position = playbackConnection.mediaController.currentPosition
                 duration = playbackConnection.mediaController.duration
             }
@@ -66,7 +66,7 @@ fun MiniPlayer(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth().padding(horizontal = 16.dp)
             .wrapContentHeight()
     ) {
         Column {
