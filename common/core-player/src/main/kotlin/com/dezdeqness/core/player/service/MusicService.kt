@@ -1,9 +1,10 @@
 package com.dezdeqness.core.player.service
 
 import androidx.annotation.OptIn
-import androidx.core.net.toUri
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.ResolvingDataSource
@@ -95,15 +96,12 @@ class MusicService : MediaSessionService(), MediaSession.Callback {
             val token = runBlocking(Dispatchers.IO) {
                 retrieveAccessTokenUseCase.invoke().getOrNull()
             }
-            val maxChunkSize = 512 * 1024L
-            val length = if (dataSpec.length > 0) dataSpec.length else maxChunkSize
             dataSpec.withUri(dataSpec.uri)
-                .subrange(dataSpec.uriPositionOffset, length)
+                .subrange(dataSpec.uriPositionOffset, dataSpec.length)
                 .withAdditionalHeaders(
-                    mapOf(
-                        "Authorization" to "OAuth $token"
-                    )
+                    mapOf("Authorization" to "OAuth $token")
                 )
+
         }
     }
 
