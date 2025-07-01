@@ -38,6 +38,7 @@ class SongMapper {
                 userEntity = SongUserEntity(
                     id = data.user.id,
                     userName = data.user.userName,
+                    userAvatar = data.user.avatarUrl,
                 )
             )
         }

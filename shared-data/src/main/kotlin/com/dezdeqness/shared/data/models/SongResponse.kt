@@ -55,4 +55,6 @@ data class SongUserRemote(
     val id: Long,
     @SerialName("username")
     val userName: String,
+    @SerialName("avatar_url")
+    val avatarUrl: String,
 )

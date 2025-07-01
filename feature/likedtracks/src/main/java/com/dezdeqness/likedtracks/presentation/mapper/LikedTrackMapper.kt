@@ -12,7 +12,7 @@ class LikedTrackMapper {
             id = data.id.toString(),
             name = data.title,
             authorName = data.metadataArtist ?: data.userEntity.userName,
-            iconImageUrl = data.artworkUrl.orEmpty(),
+            iconImageUrl = (data.artworkUrl ?: data.userEntity.userAvatar).replace("large", "t500x500"),
             streamUrl = data.streamUrl.orEmpty(),
         )
 
