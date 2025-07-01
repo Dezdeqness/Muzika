@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.likedtracks.presentation.model.LikedTrackUiModel
 import com.dezdeqness.shared.ui.ContentTile
 import org.koin.compose.viewmodel.koinViewModel
@@ -20,6 +21,12 @@ fun LikedTrackPage(
     viewModel: LikedTracksViewModel = koinViewModel(),
     onSongClick: (LikedTrackUiModel) -> Unit,
 ) {
+    val playbackConnection = LocalPlaybackConnection.current ?: return
+
+    val mediaItem by playbackConnection.currentMediaItem.collectAsStateWithLifecycle()
+
+    val isPlaying by playbackConnection.isPlaying.collectAsStateWithLifecycle()
+
     val state by viewModel.likedTracks.collectAsStateWithLifecycle()
 
     Column(
@@ -40,6 +47,7 @@ fun LikedTrackPage(
                             title = item.name,
                             subTitle = item.authorName,
                             iconUrl = item.iconImageUrl,
+                            isCurrentlyPlaying = item.id == mediaItem?.mediaId && isPlaying,
                             onMoreClicked = {}
                         )
                     }
