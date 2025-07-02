@@ -2,13 +2,16 @@ package com.dezdeqness.likedtracks.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.dezdeqness.core.dispatcher.CoroutineDispatcherProvider
+import com.dezdeqness.likedtracks.data.paging.LikedTracksPagingSource
 import com.dezdeqness.likedtracks.domain.LikedRepository
 import com.dezdeqness.likedtracks.presentation.mapper.LikedTrackMapper
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.map
 
 class LikedTracksViewModel(
     private val likedRepository: LikedRepository,
@@ -17,27 +20,18 @@ class LikedTracksViewModel(
 ) : ViewModel() {
 
     val likedTracks =
-        flow {
-            likedRepository
-                .getLikedSongs()
-                .onSuccess {
-                    val uiItems = likedTrackMapper.toUiModel(it)
-                    emit(
-                        LikedTracksState(
-                            tracks = uiItems,
-                            status = StateStatus.Loaded
-                        )
-                    )
-                }
-                .onFailure {
-                    emit(LikedTracksState(status = StateStatus.Error))
-                }
-        }
+        createPager()
+            .map { it.map(likedTrackMapper::toUiModel) }
             .flowOn(coroutineDispatcherProvider.io())
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
-                initialValue = LikedTracksState(status = StateStatus.Loading)
-            )
+            .cachedIn(viewModelScope)
+
+    private fun createPager() =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 2,
+            ),
+            pagingSourceFactory = { LikedTracksPagingSource(likedRepository = likedRepository) }
+        ).flow
 
 }

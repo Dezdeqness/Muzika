@@ -1,7 +1,7 @@
 package com.dezdeqness.likedtracks.domain
 
-import com.dezdeqness.shared.domain.models.SongEntity
+import com.dezdeqness.likedtracks.domain.model.LikedState
 
 interface LikedRepository {
-    suspend fun getLikedSongs(): Result<List<SongEntity>>
+    suspend fun getLikedSongsRemote(key: String? = null): Result<LikedState>
 }

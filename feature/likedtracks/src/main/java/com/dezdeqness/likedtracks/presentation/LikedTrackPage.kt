@@ -2,14 +2,20 @@ package com.dezdeqness.likedtracks.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.likedtracks.presentation.model.LikedTrackUiModel
 import com.dezdeqness.shared.ui.ContentTile
@@ -27,40 +33,49 @@ fun LikedTrackPage(
 
     val isPlaying by playbackConnection.isPlaying.collectAsStateWithLifecycle()
 
-    val state by viewModel.likedTracks.collectAsStateWithLifecycle()
+    val state = viewModel.likedTracks.collectAsLazyPagingItems()
 
-    Column(
+    val isAppending = state.loadState.append is LoadState.Loading
+
+    val isRefreshing = state.loadState.refresh is LoadState.Loading
+
+    Box(
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            when (state.status) {
-                StateStatus.Loaded -> {
-                    items(state.tracks.size) { index ->
-                        val item = state.tracks[index]
-                        ContentTile(
-                            modifier = Modifier.clickable(
-                                onClick = {
-                                    onSongClick(item)
-                                }
-                            ),
-                            title = item.name,
-                            subTitle = item.authorName,
-                            iconUrl = item.iconImageUrl,
-                            isCurrentlyPlaying = item.id == mediaItem?.mediaId && isPlaying,
-                            onMoreClicked = {}
-                        )
+            items(state.itemCount) { index ->
+                val item = state[index] ?: return@items
+                ContentTile(
+                    modifier = Modifier.clickable(
+                        onClick = {
+                            onSongClick(item)
+                        }
+                    ),
+                    title = item.name,
+                    subTitle = item.authorName,
+                    iconUrl = item.iconImageUrl,
+                    isCurrentSong = item.id == mediaItem?.mediaId,
+                    isCurrentlyPlaying = isPlaying,
+                    onMoreClicked = {}
+                )
+            }
+
+            if (isAppending) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
                     }
                 }
-
-                StateStatus.Loading, StateStatus.Initial -> {
-
-                }
-
-                StateStatus.Error -> {
-
-                }
             }
+        }
+
+        if (isRefreshing && state.itemCount == 0) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
 }

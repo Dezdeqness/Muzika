@@ -22,7 +22,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,39 +43,48 @@ fun ContentTile(
     subTitle: String,
     iconUrl: String,
     isDownloaded: Boolean = false,
-    isPlaying: Boolean = false,
-    isCurrentlyPlaying: Boolean = false,
+    isCurrentSong: Boolean = false,
+    isCurrentlyPlaying: Boolean,
     onMoreClicked: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
     ) {
-
         Box(contentAlignment = Alignment.Center) {
             AsyncImage(
-                iconUrl,
+                remember(iconUrl) { iconUrl },
                 contentDescription = null,
                 modifier = Modifier
                     .padding(8.dp)
                     .size(60.dp)
                     .clip(RoundedCornerShape(4.dp)),
+                colorFilter = if (isCurrentSong) {
+                    ColorFilter.tint(
+                        Color.Black.copy(alpha = 0.5f),
+                        BlendMode.Darken
+                    )
+                } else {
+                    null
+                }
             )
-            if (isPlaying && isCurrentlyPlaying) {
-                val animatedList = remember {
+            if (isCurrentSong) {
+                val animatedList = remember(isCurrentlyPlaying) {
                     listOf(
-                        Animatable(0f),
-                        Animatable(0f),
-                        Animatable(0f),
+                        Animatable(0.1f),
+                        Animatable(0.1f),
+                        Animatable(0.1f),
                     )
                 }
 
-                LaunchedEffect(Unit) {
-                    animatedList.forEach { item ->
-                        launch {
-                            while (true) {
-                                item.animateTo(Random.nextFloat() * 1f)
-                                delay(100)
+                if (isCurrentlyPlaying) {
+                    LaunchedEffect(Unit) {
+                        animatedList.forEach { item ->
+                            launch {
+                                while (true) {
+                                    item.animateTo(Random.nextFloat() * 1f)
+                                    delay(100)
+                                }
                             }
                         }
                     }
@@ -90,7 +101,7 @@ fun ContentTile(
                                 .width(6.dp)
                                 .height(item.value * 16.dp)
                                 .clip(RoundedCornerShape(2.dp))
-                                .background(Color.Blue)
+                                .background(Color.White)
                         )
                     }
                 }
@@ -158,7 +169,6 @@ fun ContentTilePreview() {
 
             },
             isCurrentlyPlaying = true,
-            isPlaying = true,
             modifier = Modifier
                 .width(320.dp)
                 .clip((RoundedCornerShape(12.dp)))
