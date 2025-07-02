@@ -69,7 +69,7 @@ fun ContentTile(
                 }
             )
             if (isCurrentSong) {
-                val animatedList = remember(isCurrentlyPlaying) {
+                val animatedList = remember {
                     listOf(
                         Animatable(0.1f),
                         Animatable(0.1f),
@@ -85,6 +85,15 @@ fun ContentTile(
                                     item.animateTo(Random.nextFloat() * 1f)
                                     delay(100)
                                 }
+                            }
+                        }
+                    }
+                } else {
+                    LaunchedEffect(Unit) {
+                        animatedList.forEach { item ->
+                            launch {
+                                item.animateTo(0.1f)
+                                delay(100)
                             }
                         }
                     }
