@@ -29,7 +29,7 @@ class LikedTracksViewModel(
         Pager(
             config = PagingConfig(
                 pageSize = 20,
-                prefetchDistance = 2,
+                prefetchDistance = 5,
             ),
             pagingSourceFactory = { LikedTracksPagingSource(likedRepository = likedRepository) }
         ).flow
