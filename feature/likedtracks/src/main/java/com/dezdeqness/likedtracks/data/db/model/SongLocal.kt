@@ -11,7 +11,7 @@ data class SongLocal(
     val createdAt: String,
     val duration: Long,
     val commentCount: Long,
-    val tags: String,
+    val tags: List<String>,
     val genre: String?,
     val title: String,
     val description: String?,
@@ -33,5 +33,5 @@ data class SongLocal(
     val userId: Long,
     val userName: String,
     val userAvatar: String,
-    val page: Int
+    val orderInResponse: Int,
 )

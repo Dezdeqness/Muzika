@@ -9,7 +9,7 @@ import com.dezdeqness.likedtracks.data.db.model.SongLocal
 
 @Dao
 interface LikedTracksDao {
-    @Query("SELECT * FROM liked_tracks")
+    @Query("SELECT * FROM liked_tracks ORDER BY orderInResponse ASC")
     fun getPagedTracks(): PagingSource<Int, SongLocal>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -17,4 +17,7 @@ interface LikedTracksDao {
 
     @Query("DELETE FROM liked_tracks")
     suspend fun clearAll()
+
+    @Query("SELECT MAX(orderInResponse) FROM liked_tracks")
+    suspend fun getMaxOrder(): Int?
 }

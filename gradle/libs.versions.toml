@@ -100,6 +100,7 @@ androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime
 
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
+androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "roomVersion" }
 
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }

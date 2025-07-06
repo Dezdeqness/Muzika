@@ -55,10 +55,15 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+    arg("room.expandProjection", "true")
+}
+
 dependencies {
 
     implementation(platform(libs.compose.bom))
-
     api(libs.appcompat)
 
     api(libs.core.ktx)
@@ -87,6 +92,9 @@ dependencies {
     implementation(libs.viewmodel.compose)
     implementation(libs.viewmodel.runtime)
     implementation(libs.viewmodel.saved.state)
+
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 
     implementation(libs.core.ui)
 
