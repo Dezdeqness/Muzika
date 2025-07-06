@@ -16,7 +16,12 @@ class LikedSongLocalDataSourceImpl(
     }
 
     override suspend fun insertAll(entities: List<SongEntity>) {
-        val startIndex = database.likedTrackDao().getMaxOrder() ?: 0
+        var startIndex = database.likedTrackDao().getMaxOrder() ?: 0
+
+        if (startIndex != 0) {
+            startIndex += 1
+        }
+
         val locals = entities.mapIndexed { index, item ->
             mapper.toLocal(index = startIndex + index, entity = item)
         }

@@ -8,6 +8,4 @@ import kotlinx.coroutines.flow.Flow
 interface LikedRepository {
     fun createPager(): Flow<PagingData<SongEntity>>
     suspend fun getLikedSongsRemote(key: String? = null): Result<LikedState>
-    suspend fun insertAll(entities: List<SongEntity>)
-    suspend fun clearAll()
 }
