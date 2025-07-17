@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -33,10 +34,16 @@ android {
     }
 }
 
+ksp {
+    arg("KOIN_CONFIG_CHECK","true")
+}
+
 dependencies {
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.compiler)
     implementation(libs.core.ktx)
     implementation(libs.corutines)
     api(libs.core)

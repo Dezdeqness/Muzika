@@ -2,10 +2,13 @@ package com.dezdeqness.core.di
 
 import com.dezdeqness.core.dispatcher.CoroutineDispatcherProvider
 import com.dezdeqness.core.dispatcher.CoroutineDispatcherProviderImpl
-import org.koin.dsl.module
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 
-val coreModule = module {
-    single<CoroutineDispatcherProvider> {
+@Module
+class CoreModule {
+
+    @Single
+    fun coroutineDispatcherProvider(): CoroutineDispatcherProvider =
         CoroutineDispatcherProviderImpl()
-    }
 }

@@ -24,7 +24,7 @@ hiltNavigation = "1.2.0"
 roomVersion = "2.7.2"
 supportCoreUiVersion = "0.2.1"
 supportCoreVersion = "0.1.1"
-
+koin-annotations = "2.0.0"
 kotlinCompilerExtensionVersion = "1.5.14"
 jetbrainsKotlinJvm = "2.1.0"
 
@@ -32,7 +32,7 @@ koin-bom = "4.0.0"
 kotlinxSerialization = "1.7.3"
 
 ksp = "2.2.0-1.0.27"
-kspVersion = "2.1.0-1.0.29"
+kspVersion = "2.0.21-1.0.28"
 material = "1.12.0"
 datastorePreferencesVersion = "1.1.2"
 uiTooling = "1.7.8"
@@ -93,6 +93,8 @@ koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose" }
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel"}
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
+koin-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferencesVersion" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }

@@ -59,6 +59,7 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
     arg("room.incremental", "true")
     arg("room.expandProjection", "true")
+    arg("KOIN_CONFIG_CHECK","true")
 }
 
 dependencies {
@@ -97,7 +98,8 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.core.ui)
-
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.compiler)
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)

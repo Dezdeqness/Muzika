@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id("de.jensklingenberg.ktorfit") version "2.2.0"
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -34,6 +35,10 @@ android {
     }
 }
 
+ksp {
+    arg("KOIN_CONFIG_CHECK","true")
+}
+
 dependencies {
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.ktorfit.common)
@@ -41,6 +46,8 @@ dependencies {
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.compiler)
     implementation(libs.core.ktx)
     implementation(libs.corutines)
     implementation(project(":common:core-network"))
