@@ -2,7 +2,9 @@ package com.dezdeqness.auth.domain.usecase
 
 import com.dezdeqness.auth.data.provider.TokenDataProvider
 import com.dezdeqness.auth.domain.repository.AuthRepository
+import org.koin.core.annotation.Single
 
+@Single
 class LoginUseCase(
     private val authRepository: AuthRepository,
     private val tokenDataProvider: TokenDataProvider,

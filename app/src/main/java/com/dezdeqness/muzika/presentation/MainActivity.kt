@@ -1,7 +1,6 @@
 package com.dezdeqness.muzika.presentation
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,129 +8,180 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RippleConfiguration
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
-import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.dezdeqness.muzika.core.ui.rememberBottomSheetState
-import com.dezdeqness.muzika.presentation.features.home.Home
-import com.dezdeqness.muzika.presentation.features.navigation.HOME_ROUTE
-import com.dezdeqness.muzika.presentation.features.navigation.SEARCH_ROUTE
-import com.dezdeqness.muzika.presentation.features.player.Player
-import com.dezdeqness.muzika.presentation.features.search.Search
-import com.dezdeqness.muzika.service.MusicService
-import com.dezdeqness.muzika.service.PlaybackConnection
-import com.google.common.util.concurrent.ListenableFuture
+import com.dezdeqness.core.player.locals.LocalPlaybackConnection
+import com.dezdeqness.core.ui.theme.AppTheme
+import com.dezdeqness.likedtracks.navigation.LIKED_ROUTE
+import com.dezdeqness.likedtracks.navigation.likedScreen
+import com.dezdeqness.player.core.rememberBottomSheetState
+import com.dezdeqness.player.presentation.PlayerBottomSheet
+import com.dezdeqness.player.presentation.PlayerControllerManager
 
 class MainActivity : AppCompatActivity() {
 
-    private var mediaController: MediaController? = null
-    private var controllerFuture: ListenableFuture<MediaController>? = null
-    private var playbackConnection by mutableStateOf<PlaybackConnection?>(null)
+    private lateinit var controllerManager: PlayerControllerManager
 
+    @androidx.annotation.OptIn(UnstableApi::class)
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("UnusedBoxWithConstraintsScope")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sessionToken = SessionToken(this, ComponentName(this, MusicService::class.java))
-        controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        controllerFuture?.addListener({
-            if (controllerFuture?.isDone == true) {
-                mediaController = controllerFuture?.get()
-                playbackConnection = PlaybackConnection(mediaController!!)
+        controllerManager = PlayerControllerManager(this.applicationContext)
+        controllerManager.connect()
 
-            }
-        }, ContextCompat.getMainExecutor(this))
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowCompat.getInsetsController(window, window.decorView.rootView).apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
-        }
+//        WindowCompat.getInsetsController(window, window.decorView.rootView).apply {
+//            isAppearanceLightStatusBars = false
+//            isAppearanceLightNavigationBars = false
+//        }
 
         setContent {
-            MaterialTheme {
-                val rippleTheme = RippleConfiguration(
-                    rippleAlpha = RippleAlpha(
-                        pressedAlpha = 0.48f,
-                        focusedAlpha = 0.48f,
-                        draggedAlpha = 0.16f,
-                        hoveredAlpha = 0.08f
-                    ),
-                    color = Color.White,
-                )
+            val rootController = rememberNavController()
 
-                CompositionLocalProvider(
-                    LocalRippleConfiguration provides rippleTheme,
-                    LocalPlaybackConnection provides playbackConnection,
-                ) {
-                    val navController = rememberNavController()
-
-                    BoxWithConstraints(
-                        modifier = Modifier
-                            .background(Color.Black)
-                            .fillMaxSize()
+            AppTheme {
+                val playbackConnection by controllerManager.playbackConnection.collectAsStateWithLifecycle()
+                CompositionLocalProvider(LocalPlaybackConnection provides playbackConnection) {
+                    NavHost(
+                        navController = rootController,
+                        startDestination = "root",
+                        modifier = Modifier.fillMaxSize(),
                     ) {
-                        val playerBottomSheetState = rememberBottomSheetState(
-                            dismissedBound = 0.dp,
-                            collapsedBound = WindowInsets.navigationBars.asPaddingValues()
-                                .calculateBottomPadding() + 72.dp,
-                            expandedBound = maxHeight,
-                        )
+                        composable(route = "root") {
+                            val navController = rememberNavController()
 
-                        val connection =
-                            LocalPlaybackConnection.current ?: return@BoxWithConstraints
+                            val currentDestination =
+                                navController.currentBackStackEntryAsState().value?.destination?.route
+                            Scaffold(
+                                bottomBar = {
+                                    NavigationBar(
+                                        containerColor = MaterialTheme.colorScheme.background,
+                                        tonalElevation = 0.dp,
+                                    ) {
+                                        AquaBottomTabModel.entries.forEach { item ->
+                                            NavigationBarItem(
+                                                label = {
+                                                    Text(item.title)
+                                                },
+                                                selected = currentDestination == item.route,
+                                                onClick = {
+                                                    if (currentDestination != item.route) {
+                                                        navController.navigate(item.route) {
+                                                            popUpTo(navController.graph.startDestinationId) {
+                                                                saveState = true
+                                                            }
+                                                            launchSingleTop = true
+                                                            restoreState = true
+                                                        }
+                                                    }
+                                                },
+                                                icon = {
 
-                        val currentMediaItem = connection.currentMediaItem.collectAsState()
-
-                        LaunchedEffect(currentMediaItem.value) {
-                            val mediaItem = playbackConnection?.currentMediaItem
-                            if (mediaItem == null) {
-                                if (!playerBottomSheetState.isDismissed) {
-                                    playerBottomSheetState.dismiss()
+                                                },
+                                            )
+                                        }
+                                    }
                                 }
-                            } else {
-                                if (playerBottomSheetState.isDismissed) {
-                                    playerBottomSheetState.collapseSoft()
+                            ) { padding ->
+                                BoxWithConstraints(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(padding)
+                                ) {
+                                    NavHost(
+                                        navController = navController,
+                                        startDestination = "home",
+                                        modifier = Modifier.fillMaxSize()
+                                    ) {
+                                        composable("home") {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .background(Color.Green)
+                                            )
+                                        }
+                                        likedScreen(
+                                            onSongClick = { item ->
+                                                val mediaItem = MediaItem
+                                                    .Builder()
+                                                    .setMediaId(item.id)
+                                                    .setUri(item.streamUrl)
+                                                    .setCustomCacheKey(item.id)
+                                                    .setTag(item)
+                                                    .setMediaMetadata(
+                                                        MediaMetadata
+                                                            .Builder()
+                                                            .setTitle(item.name)
+                                                            .setSubtitle(item.authorName)
+                                                            .setArtist(item.authorName)
+                                                            .setArtworkUri(item.iconImageUrl.toUri())
+                                                            .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
+                                                            .build()
+                                                    )
+                                                    .build()
+                                                playbackConnection?.startPlay(mediaItem)
+
+                                            }
+                                        )
+                                        composable("settings") {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .background(Color.Cyan)
+                                            )
+                                        }
+                                    }
+
+                                    val playerBottomSheetState = rememberBottomSheetState(
+                                        dismissedBound = 0.dp,
+                                        collapsedBound = 72.dp,
+                                        expandedBound = maxHeight,
+                                    )
+
+                                    val currentMediaItem =
+                                        playbackConnection?.currentMediaItem?.collectAsStateWithLifecycle()
+
+                                    LaunchedEffect(currentMediaItem?.value) {
+                                        val mediaItem = playbackConnection?.currentMediaItem
+                                        if (mediaItem == null) {
+                                            if (!playerBottomSheetState.isDismissed) {
+                                                playerBottomSheetState.dismiss()
+                                            }
+                                        } else {
+                                            if (playerBottomSheetState.isDismissed) {
+                                                playerBottomSheetState.collapseSoft()
+                                            }
+                                        }
+                                    }
+
+
+                                    PlayerBottomSheet(state = playerBottomSheetState)
                                 }
                             }
                         }
-
-                        NavHost(
-                            navController = navController,
-                            startDestination = HOME_ROUTE,
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            composable(HOME_ROUTE) {
-                                Home(navController = navController)
-                            }
-                            composable(SEARCH_ROUTE) {
-                                Search()
-                            }
-                        }
-
-                        Player(state = playerBottomSheetState)
                     }
                 }
             }
@@ -141,10 +191,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (isFinishing) {
-            controllerFuture?.let { MediaController.releaseFuture(it) }
-            playbackConnection?.dispose()
-        }
+        controllerManager.disconnect(isFinishing = isFinishing)
     }
 
     companion object {
@@ -153,5 +200,8 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-val LocalPlaybackConnection =
-    staticCompositionLocalOf<PlaybackConnection?> { error("No PlaybackConnection provided") }
+enum class AquaBottomTabModel(val title: String, val route: String) {
+    HOME("Home", "home"),
+    SAVED("Liked", LIKED_ROUTE),
+    SETTINGS("Settings", "settings")
+}

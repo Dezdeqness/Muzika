@@ -1,15 +1,15 @@
 package com.dezdeqness.muzika.di.navigation
 
-import com.dezdeqness.auth.navigation.AuthNavigation
 import com.dezdeqness.muzika.navigation.ApplicationNavigation
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 
-val navigationModule = module {
-    single {
-        ApplicationNavigation()
-    }
+@Module
+@ComponentScan("com.dezdeqness.muzika")
+class NavigationModule {
 
-    single<AuthNavigation> {
-        get<ApplicationNavigation>()
-    }
+    @Single
+    fun provideAuthNavigation(navigation: ApplicationNavigation) =
+        navigation
 }

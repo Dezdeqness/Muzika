@@ -3,7 +3,9 @@ package com.dezdeqness.likedtracks.data.datasource
 import com.dezdeqness.likedtracks.data.api.LikedService
 import com.dezdeqness.likedtracks.domain.model.LikedState
 import com.dezdeqness.shared.data.mapper.SongMapper
+import org.koin.core.annotation.Single
 
+@Single(binds = [LikedSongRemoteDataSource::class])
 class LikedSongRemoteDataSourceImpl(
     private val likedService: LikedService,
     private val songMapper: SongMapper,

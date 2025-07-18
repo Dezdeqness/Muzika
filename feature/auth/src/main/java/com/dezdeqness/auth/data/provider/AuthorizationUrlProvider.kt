@@ -1,9 +1,11 @@
 package com.dezdeqness.auth.data.provider
 
 import com.dezdeqness.auth.core.AuthConstants
+import org.koin.core.annotation.Single
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
+@Single
 class AuthorizationUrlProvider {
 
     fun composeAuthUrl(codeChallenge: String, state: String) = buildString {

@@ -9,18 +9,7 @@ import org.koin.dsl.module
 
 
 internal val domainModule = module {
-    single<IsRefreshedTokenUseCase> {
-        IsRefreshedTokenUseCaseImpl(
-            authRepository = get(),
-            tokenDataProvider = get(),
-        )
-    }
 
-    single<RetrieveAccessTokenUseCase> {
-        RetrieveAccessTokenUseCaseImpl(
-            tokenDataProvider = get(),
-        )
-    }
 
     single {
         LoginUseCase(

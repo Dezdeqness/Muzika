@@ -5,7 +5,9 @@ import com.dezdeqness.auth.data.exception.TokenNotExistException
 import com.dezdeqness.auth.data.provider.TokenDataProvider
 import com.dezdeqness.auth.domain.model.TokenEntity
 import com.dezdeqness.auth.domain.repository.AuthRepository
+import org.koin.core.annotation.Single
 
+@Single(binds = [AuthRepository::class])
 class AuthRepositoryImpl(
     private val authDatasource: AuthDatasource,
     private val tokenDataProvider: TokenDataProvider,

@@ -3,8 +3,10 @@ package com.dezdeqness.auth.utils
 import java.security.MessageDigest
 import java.security.SecureRandom
 import android.util.Base64
+import org.koin.core.annotation.Single
 import kotlin.random.Random
 
+@Single
 class PKCEUtils {
 
     private val secureRandom = SecureRandom()

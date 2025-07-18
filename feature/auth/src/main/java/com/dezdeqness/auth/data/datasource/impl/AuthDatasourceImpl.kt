@@ -5,7 +5,9 @@ import com.dezdeqness.auth.data.api.AuthService
 import com.dezdeqness.auth.data.datasource.AuthDatasource
 import com.dezdeqness.auth.data.mapper.TokenDataMapper
 import com.dezdeqness.auth.domain.model.TokenEntity
+import org.koin.core.annotation.Single
 
+@Single(binds = [AuthDatasource::class])
 class AuthDatasourceImpl(
     private val authService: AuthService,
     private val tokenDataMapper: TokenDataMapper,

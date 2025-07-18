@@ -5,7 +5,9 @@ import com.dezdeqness.likedtracks.data.db.LikedDatabase
 import com.dezdeqness.likedtracks.data.db.mapper.SongLocalMapper
 import com.dezdeqness.likedtracks.data.db.model.SongLocal
 import com.dezdeqness.shared.domain.models.SongEntity
+import org.koin.core.annotation.Single
 
+@Single(binds = [LikedSongLocalDatasource::class])
 class LikedSongLocalDataSourceImpl(
     private val database: LikedDatabase,
     private val mapper: SongLocalMapper

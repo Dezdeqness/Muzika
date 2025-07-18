@@ -11,7 +11,9 @@ import com.dezdeqness.likedtracks.data.db.mapper.SongLocalMapper
 import com.dezdeqness.likedtracks.data.paging.LikedTracksRemoteMediator
 import com.dezdeqness.likedtracks.domain.LikedRepository
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Single
 
+@Single(binds = [LikedRepository::class])
 class LikedRepositoryImpl(
     private val likedSongRemoteDataSource: LikedSongRemoteDataSource,
     private val likedSongLocalDatasource: LikedSongLocalDatasource,

@@ -4,7 +4,9 @@ import com.dezdeqness.likedtracks.data.db.model.SongLocal
 import com.dezdeqness.shared.domain.models.SongEntity
 import com.dezdeqness.shared.domain.models.SongKind
 import com.dezdeqness.shared.domain.models.SongUserEntity
+import org.koin.core.annotation.Single
 
+@Single
 class SongLocalMapper {
     fun toLocal(index: Int, entity: SongEntity): SongLocal = SongLocal(
         id = entity.id,

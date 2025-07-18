@@ -9,7 +9,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.dezdeqness.auth.domain.model.TokenEntity
 import kotlinx.coroutines.flow.firstOrNull
+import org.koin.core.annotation.Single
 
+@Single
 class TokenDataProvider(
     private val context: Context,
 ) {

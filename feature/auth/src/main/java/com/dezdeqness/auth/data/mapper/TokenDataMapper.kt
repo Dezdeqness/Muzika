@@ -2,7 +2,9 @@ package com.dezdeqness.auth.data.mapper
 
 import com.dezdeqness.auth.data.model.api.response.TokenAPI
 import com.dezdeqness.auth.domain.model.TokenEntity
+import org.koin.core.annotation.Single
 
+@Single
 class TokenDataMapper {
 
     fun from(tokenAPI: TokenAPI) = TokenEntity(
