@@ -3,6 +3,8 @@ package com.dezdeqness.core.network.di
 import com.dezdeqness.core.network.core.CoreConstants
 import com.dezdeqness.core.network.data.interceptors.AuthTokenInterceptor
 import com.dezdeqness.core.network.data.interceptors.RefreshTokenInterceptor
+import com.dezdeqness.core.network.domain.IsRefreshedTokenUseCase
+import com.dezdeqness.core.network.domain.RetrieveAccessTokenUseCase
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
@@ -17,34 +19,37 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import org.koin.dsl.module
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Provided
+import org.koin.core.annotation.Single
 
-val coreNetworkModule = module {
-    single<Json> {
-        Json {
-            ignoreUnknownKeys = true
-            explicitNulls = false
-            prettyPrint = true
-            isLenient = true
-        }
+@Module
+class CoreNetworkModule {
+    @Single
+    fun provideJson(): Json = Json {
+        ignoreUnknownKeys = true
+        explicitNulls = false
+        prettyPrint = true
+        isLenient = true
     }
 
-    single {
-        AuthTokenInterceptor(
-            useCase = get()
-        )
-    }
+    @Single
+    fun provideAuthTokenInterceptor(
+        @Provided useCase: RetrieveAccessTokenUseCase
+    ): AuthTokenInterceptor = AuthTokenInterceptor(useCase)
 
-    single {
-        RefreshTokenInterceptor(
-            isRefreshedTokenUseCase = get(),
-        )
-    }
+    @Single
+    fun provideRefreshTokenInterceptor(
+        @Provided isRefreshedTokenUseCase: IsRefreshedTokenUseCase
+    ): RefreshTokenInterceptor = RefreshTokenInterceptor(isRefreshedTokenUseCase)
 
-    single<HttpClient>(qualifier = Qualifiers.defaultClientQualifier) {
+    @Single
+    @Named(Qualifiers.defaultClientQualifier)
+    fun provideDefaultHttpClient(json: Json) =
         HttpClient {
             install(ContentNegotiation) {
-                json(get<Json>())
+                json(json)
             }
             install(Logging) {
                 level = LogLevel.ALL
@@ -54,12 +59,18 @@ val coreNetworkModule = module {
                 contentType(ContentType.Application.Json)
             }
         }
-    }
 
-    single<HttpClient>(qualifier = Qualifiers.withAuthClientQualifier) {
+
+    @Single
+    @Named(Qualifiers.withAuthClientQualifier)
+    fun provideHttpClientWithAuth(
+        json: Json,
+        refreshTokenInterceptor: RefreshTokenInterceptor,
+        authTokenInterceptor: AuthTokenInterceptor
+    ) =
         HttpClient {
             install(ContentNegotiation) {
-                json(get<Json>())
+                json(json)
             }
             install(Logging) {
                 level = LogLevel.ALL
@@ -70,20 +81,21 @@ val coreNetworkModule = module {
             }
         }.apply {
             requestPipeline.intercept(HttpRequestPipeline.State) {
-                get<RefreshTokenInterceptor>().intercept()
-                get<AuthTokenInterceptor>().intercept(context)
+                refreshTokenInterceptor.intercept()
+                authTokenInterceptor.intercept(context)
                 proceed()
             }
         }
-    }
 
-    single<Ktorfit>(qualifier = Qualifiers.sharedKtorfitQualified) {
+
+    @Single
+    @Named(Qualifiers.sharedKtorfitQualified)
+    fun provideKtorfit(@Named(Qualifiers.withAuthClientQualifier) httpClient: HttpClient) =
         Ktorfit
             .Builder()
             .baseUrl(CoreConstants.API_URL)
-            .httpClient(get<HttpClient>(Qualifiers.withAuthClientQualifier))
+            .httpClient(httpClient)
             .converterFactories(ResponseConverterFactory())
             .build()
-    }
 
 }

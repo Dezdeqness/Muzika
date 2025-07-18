@@ -4,7 +4,9 @@ import com.dezdeqness.shared.data.models.SongRemote
 import com.dezdeqness.shared.domain.models.SongEntity
 import com.dezdeqness.shared.domain.models.SongKind
 import com.dezdeqness.shared.domain.models.SongUserEntity
+import org.koin.core.annotation.Single
 
+@Single
 class SongMapper {
 
     fun toEntity(data: SongRemote): SongEntity {

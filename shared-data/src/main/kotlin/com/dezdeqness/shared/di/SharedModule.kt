@@ -1,10 +1,8 @@
 package com.dezdeqness.shared.di
 
-import com.dezdeqness.shared.data.mapper.SongMapper
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val sharedModule = module {
-    single {
-        SongMapper()
-    }
-}
+@Module
+@ComponentScan("com.dezdeqness.shared")
+class SharedModule
