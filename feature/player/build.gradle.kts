@@ -59,4 +59,5 @@ dependencies {
     implementation(project(":common:core"))
     implementation(project(":shared-ui"))
     implementation(libs.coil)
+    implementation(libs.androidx.palette.ktx)
 }

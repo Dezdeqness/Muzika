@@ -21,6 +21,7 @@ okhttp-logger = "4.12.0"
 navigation = "2.8.7"
 dagger = "2.51.1"
 hiltNavigation = "1.2.0"
+paletteKtx = "1.0.0"
 roomVersion = "2.7.2"
 supportCoreUiVersion = "0.2.1"
 supportCoreVersion = "0.1.1"
@@ -42,6 +43,7 @@ paging = "3.3.6"
 
 [libraries]
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
+androidx-palette-ktx = { module = "androidx.palette:palette-ktx", version.ref = "paletteKtx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 ktorfit-converters-call = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-call", version.ref = "ktorfit" }
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ksp" }

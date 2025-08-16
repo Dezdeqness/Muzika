@@ -32,11 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.Player
+import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.core.utils.TimeUtils
 import com.dezdeqness.player.core.BottomSheetState
@@ -46,8 +50,11 @@ import kotlinx.coroutines.delay
 @Composable
 fun PlayerContent(
     modifier: Modifier = Modifier,
+    onBackgroundColorChanged: (Color) -> Unit,
     state: BottomSheetState,
 ) {
+    val context = LocalContext.current
+
     val playbackConnection = LocalPlaybackConnection.current ?: return
 
     val currentMediaItem by playbackConnection.currentMediaItem.collectAsState()
@@ -79,7 +86,7 @@ fun PlayerContent(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color.DarkGray,
+        containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
                 title = {},
@@ -97,7 +104,7 @@ fun PlayerContent(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors()
-                    .copy(containerColor = Color.DarkGray)
+                    .copy(containerColor = Color.Transparent)
             )
         }
     ) { padding ->
@@ -110,13 +117,30 @@ fun PlayerContent(
             Box(
                 contentAlignment = Alignment.Center,
             ) {
+                val request = remember(mediaItem.mediaMetadata.artworkUri) {
+                    ImageRequest.Builder(context)
+                        .data(mediaItem.mediaMetadata.artworkUri)
+                        .allowHardware(false)
+                        .build()
+                }
+
                 AsyncImage(
-                    mediaItem.mediaMetadata.artworkUri,
+                    request,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp)),
+                    onSuccess = { success ->
+                        val drawable = success.result.drawable
+                        val bitmap = (drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
+                        bitmap?.let {
+                            val colorInt = Palette.from(it)
+                                .generate()
+                                .getDominantColor(Color.Black.toArgb())
+                            onBackgroundColorChanged(Color(colorInt))
+                        }
+                    }
                 )
             }
 

@@ -2,6 +2,10 @@ package com.dezdeqness.player.presentation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
@@ -18,19 +22,30 @@ fun PlayerBottomSheet(
 ) {
     val playbackConnection = LocalPlaybackConnection.current ?: return
 
+    var dominantColor by remember { mutableStateOf(Color.Black) }
+
     BottomSheet(
         state = state,
         modifier = modifier,
-        backgroundColor = Color.DarkGray,
+        backgroundColor = dominantColor,
         onDismiss = {
             state.dismiss()
             playbackConnection.togglePauseResume()
         },
         collapsedContent = {
-            MiniPlayer()
+            MiniPlayer(
+                onBackgroundColorChanged = {
+                    dominantColor = it
+                }
+            )
         }
     ) {
-        PlayerContent(state = state)
+        PlayerContent(
+            state = state,
+            onBackgroundColorChanged = {
+                dominantColor = it
+            }
+        )
     }
 
 }

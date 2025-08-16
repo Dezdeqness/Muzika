@@ -37,6 +37,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -94,7 +95,14 @@ fun BottomSheet(
                     topEnd = if (!state.isExpanded) 16.dp else 0.dp
                 )
             )
-            .background(backgroundColor)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        backgroundColor.lighten(0.4f),
+                        backgroundColor.darken(0.4f)
+                    )
+                )
+            )
     ) {
         if (!state.isCollapsed && !state.isDismissed) {
             BackHandler(onBack = state::collapseSoft)
@@ -286,4 +294,18 @@ fun rememberBottomSheetState(
             collapsedBound = collapsedBound
         )
     }
+}
+
+fun Color.lighten(factor: Float): Color {
+    val r = (red + (1 - red) * factor).coerceIn(0f, 1f)
+    val g = (green + (1 - green) * factor).coerceIn(0f, 1f)
+    val b = (blue + (1 - blue) * factor).coerceIn(0f, 1f)
+    return Color(r, g, b, alpha)
+}
+
+fun Color.darken(factor: Float): Color {
+    val r = (red * (1 - factor)).coerceIn(0f, 1f)
+    val g = (green * (1 - factor)).coerceIn(0f, 1f)
+    val b = (blue * (1 - factor)).coerceIn(0f, 1f)
+    return Color(r, g, b, alpha)
 }
