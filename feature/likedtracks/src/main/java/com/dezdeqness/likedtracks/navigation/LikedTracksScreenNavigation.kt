@@ -7,8 +7,14 @@ import com.dezdeqness.likedtracks.presentation.model.LikedTrackUiModel
 
 const val LIKED_ROUTE = "liked_route"
 
-fun NavGraphBuilder.likedScreen(onSongClick: (LikedTrackUiModel) -> Unit) {
+fun NavGraphBuilder.likedScreen(
+    onSongClick: (Int) -> Unit,
+    onPlaylistChanged: (List<LikedTrackUiModel>) -> Unit,
+) {
     composable(LIKED_ROUTE) {
-        LikedTrackPage(onSongClick = onSongClick)
+        LikedTrackPage(
+            onSongClick = onSongClick,
+            onPlaylistChanged = onPlaylistChanged,
+        )
     }
 }

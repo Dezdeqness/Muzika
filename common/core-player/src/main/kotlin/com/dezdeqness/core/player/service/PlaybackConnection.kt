@@ -43,9 +43,33 @@ class PlaybackConnection(
         mediaController.removeListener(this)
     }
 
-    fun startPlay(mediaItem: MediaItem) {
-        mediaController.setMediaItems(listOf(mediaItem))
+    fun updatePlaylist(mediaItems: List<MediaItem>) {
+        mediaController.setMediaItems(mediaItems, false)
+    }
+
+    fun nextSong() {
+        if (mediaController.hasNextMediaItem()) {
+            mediaController.seekToNext()
+            mediaController.prepare()
+            mediaController.playWhenReady = true
+        }
+    }
+
+    fun previousSong() {
+        if (mediaController.hasPreviousMediaItem()) {
+            mediaController.seekToPrevious()
+            mediaController.prepare()
+            mediaController.playWhenReady = true
+        } else {
+
+            mediaController.seekTo(0)
+        }
+    }
+
+    fun startPlay(index: Int) {
+        mediaController.seekTo(index, 0)
         mediaController.prepare()
+
         mediaController.playWhenReady = true
     }
 }

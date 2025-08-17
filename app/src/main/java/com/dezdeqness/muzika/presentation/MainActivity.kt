@@ -159,26 +159,31 @@ class MainActivity : AppCompatActivity() {
                                             )
                                         }
                                         likedScreen(
-                                            onSongClick = { item ->
-                                                val mediaItem = MediaItem
-                                                    .Builder()
-                                                    .setMediaId(item.id)
-                                                    .setUri(item.streamUrl)
-                                                    .setCustomCacheKey(item.id)
-                                                    .setTag(item)
-                                                    .setMediaMetadata(
-                                                        MediaMetadata
-                                                            .Builder()
-                                                            .setTitle(item.name)
-                                                            .setSubtitle(item.authorName)
-                                                            .setArtist(item.authorName)
-                                                            .setArtworkUri(item.iconImageUrl.toUri())
-                                                            .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
-                                                            .build()
-                                                    )
-                                                    .build()
-                                                playbackConnection?.startPlay(mediaItem)
+                                            onPlaylistChanged = { items ->
+                                                val mediaItems = items.map { item ->
+                                                    MediaItem
+                                                        .Builder()
+                                                        .setMediaId(item.id)
+                                                        .setUri(item.streamUrl)
+                                                        .setCustomCacheKey(item.id)
+                                                        .setTag(item)
+                                                        .setMediaMetadata(
+                                                            MediaMetadata
+                                                                .Builder()
+                                                                .setTitle(item.name)
+                                                                .setSubtitle(item.authorName)
+                                                                .setArtist(item.authorName)
+                                                                .setArtworkUri(item.iconImageUrl.toUri())
+                                                                .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
+                                                                .build()
+                                                        )
+                                                        .build()
+                                                }
 
+                                                playbackConnection?.updatePlaylist(mediaItems)
+                                            },
+                                            onSongClick = { index ->
+                                                playbackConnection?.startPlay(index)
                                             }
                                         )
                                         composable("settings") {

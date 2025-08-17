@@ -7,9 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +49,7 @@ import coil.request.ImageRequest
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.core.utils.TimeUtils
 import com.dezdeqness.player.core.BottomSheetState
+import com.dezdeqness.shared.ui.R
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +68,8 @@ fun PlayerContent(
     val mediaItem = currentMediaItem ?: return
 
     val playBackSate by playbackConnection.playBackState.collectAsState()
+
+    val isPlaying by playbackConnection.isPlaying.collectAsState()
 
     var position by rememberSaveable(playBackSate) {
         mutableLongStateOf(playbackConnection.mediaController.currentPosition)
@@ -129,6 +137,7 @@ fun PlayerContent(
                     contentDescription = null,
                     modifier = Modifier
                         .padding(8.dp)
+                        .height(350.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp)),
                     onSuccess = { success ->
@@ -198,6 +207,42 @@ fun PlayerContent(
                         maxLines = 1,
                         fontSize = 16.sp,
                         color = Color.White,
+                    )
+                }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(onClick = { playbackConnection.previousSong() }) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        tint = Color.White,
+                        contentDescription = "Previous",
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+
+                IconButton(
+                    onClick = {
+                        playbackConnection.togglePauseResume()
+                    },
+                ) {
+                    Icon(
+                        painterResource(id = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_resume),
+                        tint = Color.White,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+
+                IconButton(onClick = { playbackConnection.nextSong() }) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        tint = Color.White,
+                        contentDescription = "Previous",
+                        modifier = Modifier.size(24.dp),
                     )
                 }
             }
