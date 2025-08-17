@@ -178,6 +178,13 @@ class BottomSheetState(
         }
     }
 
+    fun updateBounds(
+        dismissedBound: Dp,
+        expandedBound: Dp,
+    ) {
+        animatable.updateBounds(dismissedBound.coerceAtMost(expandedBound), expandedBound)
+    }
+
     fun expand(animationSpec: AnimationSpec<Dp>) {
         onAnchorChanged(expandedAnchor)
         coroutineScope.launch {
