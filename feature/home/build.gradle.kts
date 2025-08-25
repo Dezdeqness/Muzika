@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("de.jensklingenberg.ktorfit") version "2.2.0"
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -70,4 +71,5 @@ dependencies {
     implementation(project(":shared-data"))
     implementation(project(":shared-ui"))
     implementation(libs.coil)
+    implementation(libs.core.ui)
 }

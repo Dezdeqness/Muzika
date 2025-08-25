@@ -45,6 +45,7 @@ class HomePageViewModel(
                         it.forEach {
                             if (it.isFailure) {
                                 emit(HomeState(status = StateStatus.Error))
+                                return@flow
                             }
                         }
                     }
@@ -64,6 +65,10 @@ class HomePageViewModel(
                 started = SharingStarted.Lazily,
                 initialValue = HomeState(status = StateStatus.Loading)
             )
+
+    fun onErrorRetry() {
+        reloadTrigger.tryEmit(Unit)
+    }
 
     companion object {
         private const val QUERY_ANIME = "anime"

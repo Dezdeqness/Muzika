@@ -5,6 +5,7 @@ import com.dezdeqness.auth.di.AuthModule
 import com.dezdeqness.core.di.CoreModule
 import com.dezdeqness.core.network.di.CoreNetworkModule
 import com.dezdeqness.core.player.di.CorePlayerModule
+import com.dezdeqness.home.di.HomeModule
 import com.dezdeqness.likedtracks.di.LikedTracksModule
 import com.dezdeqness.muzika.di.navigation.NavigationModule
 import com.dezdeqness.shared.di.SharedModule
@@ -25,6 +26,7 @@ class MuzikaApplication : Application() {
                 CoreNetworkModule().module,
                 AuthModule().module,
                 LikedTracksModule().module,
+                HomeModule().module,
             )
         }
     }

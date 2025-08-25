@@ -19,6 +19,7 @@ class PlaylistRemoteDataSourceImpl(
                     "limit" to 5,
                     "linked_partitioning" to true,
                     "show_tracks" to false,
+                    "q" to query,
                 )
             )
             if (response.isSuccessful) {
