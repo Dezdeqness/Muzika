@@ -71,8 +71,11 @@ dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":feature:player"))
     implementation(project(":feature:likedtracks"))
+    implementation(project(":feature:home"))
+
     implementation(project(":shared-data"))
     implementation(project(":shared-ui"))
+
     implementation(project(":common:core-network"))
     implementation(project(":common:core"))
 
