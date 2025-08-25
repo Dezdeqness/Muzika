@@ -43,6 +43,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.core.ui.theme.AppTheme
+import com.dezdeqness.home.navigation.HOME_ROUTE
+import com.dezdeqness.home.navigation.homeScreen
 import com.dezdeqness.likedtracks.navigation.LIKED_ROUTE
 import com.dezdeqness.likedtracks.navigation.likedScreen
 import com.dezdeqness.player.core.rememberBottomSheetState
@@ -146,18 +148,12 @@ class MainActivity : AppCompatActivity() {
 
                                     NavHost(
                                         navController = navController,
-                                        startDestination = LIKED_ROUTE,
+                                        startDestination = HOME_ROUTE,
                                         modifier = Modifier
                                             .fillMaxSize()
                                             .padding(top = padding.calculateTopPadding())
                                     ) {
-                                        composable("home") {
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxSize()
-                                                    .background(Color.Green)
-                                            )
-                                        }
+                                        homeScreen()
                                         likedScreen(
                                             onPlaylistChanged = { items ->
                                                 val mediaItems = items.map { item ->
@@ -234,7 +230,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 enum class AquaBottomTabModel(val title: String, val route: String) {
-    HOME("Home", "home"),
+    HOME("Home", HOME_ROUTE),
     SAVED("Liked", LIKED_ROUTE),
     SETTINGS("Settings", "settings")
 }
