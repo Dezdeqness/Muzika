@@ -1,6 +1,6 @@
 package com.dezdeqness.home.presentation.mapper
 
-import com.dezdeqness.home.domain.model.PlaylistEntity
+import com.dezdeqness.shared.domain.models.PlaylistEntity
 import com.dezdeqness.home.presentation.model.HomePlaylistUiModel
 
 class HomeUiMapper {

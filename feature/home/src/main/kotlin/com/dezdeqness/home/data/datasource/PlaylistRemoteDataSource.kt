@@ -1,6 +1,6 @@
 package com.dezdeqness.home.data.datasource
 
-import com.dezdeqness.home.domain.model.PlaylistState
+import com.dezdeqness.shared.domain.models.PlaylistState
 
 interface PlaylistRemoteDataSource {
     suspend fun getPlaylistByQuery(query: String, limit: Int): Result<PlaylistState>

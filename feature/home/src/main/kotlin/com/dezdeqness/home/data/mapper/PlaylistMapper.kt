@@ -1,7 +1,7 @@
 package com.dezdeqness.home.data.mapper
 
 import com.dezdeqness.home.data.models.PlaylistRemote
-import com.dezdeqness.home.domain.model.PlaylistEntity
+import com.dezdeqness.shared.domain.models.PlaylistEntity
 import com.dezdeqness.shared.domain.models.SongUserEntity
 import org.koin.core.annotation.Single
 

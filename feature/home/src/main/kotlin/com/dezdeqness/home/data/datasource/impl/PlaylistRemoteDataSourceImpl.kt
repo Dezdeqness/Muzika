@@ -3,7 +3,7 @@ package com.dezdeqness.home.data.datasource.impl
 import com.dezdeqness.home.data.api.PlaylistService
 import com.dezdeqness.home.data.datasource.PlaylistRemoteDataSource
 import com.dezdeqness.home.data.mapper.PlaylistMapper
-import com.dezdeqness.home.domain.model.PlaylistState
+import com.dezdeqness.shared.domain.models.PlaylistState
 import org.koin.core.annotation.Single
 
 @Single(binds = [PlaylistRemoteDataSource::class])

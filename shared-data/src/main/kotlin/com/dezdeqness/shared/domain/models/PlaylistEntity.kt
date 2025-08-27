@@ -1,6 +1,4 @@
-package com.dezdeqness.home.domain.model
-
-import com.dezdeqness.shared.domain.models.SongUserEntity
+package com.dezdeqness.shared.domain.models
 
 data class PlaylistEntity(
     val duration: Long,

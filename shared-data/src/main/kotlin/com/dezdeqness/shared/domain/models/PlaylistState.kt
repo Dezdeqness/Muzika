@@ -1,4 +1,4 @@
-package com.dezdeqness.home.domain.model
+package com.dezdeqness.shared.domain.models
 
 data class PlaylistState(
     val list: List<PlaylistEntity>,
