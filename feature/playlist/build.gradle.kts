@@ -72,4 +72,7 @@ dependencies {
     implementation(project(":shared-ui"))
     implementation(libs.coil)
     implementation(libs.core.ui)
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
+    implementation(libs.viewmodel.saved.state)
 }

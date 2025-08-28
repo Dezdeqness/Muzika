@@ -1,6 +1,9 @@
 package com.dezdeqness.playlist.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.dezdeqness.playlist.data.datasource.PlaylistRemoteDataSource
+import com.dezdeqness.playlist.data.paging.PlaylistTracksSource
 import com.dezdeqness.playlist.domain.repository.PlaylistTracksRepository
 import org.koin.core.annotation.Single
 
@@ -8,8 +11,19 @@ import org.koin.core.annotation.Single
 class PlaylistTracksRepositoryImpl(
     private val playlistRemoteDataSource: PlaylistRemoteDataSource,
 ) : PlaylistTracksRepository {
-    override suspend fun getPlaylistTracks(
-        usn: String,
-        key: String?
-    ) = playlistRemoteDataSource.getPlaylistTracks(usn = usn, key = key)
+
+    override fun createPager(usn: String) =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                initialLoadSize = 20,
+                prefetchDistance = 10,
+            ),
+            pagingSourceFactory = {
+                PlaylistTracksSource(
+                    usn = usn,
+                    playlistRemoteDataSource = playlistRemoteDataSource,
+                )
+            }
+        ).flow
 }
