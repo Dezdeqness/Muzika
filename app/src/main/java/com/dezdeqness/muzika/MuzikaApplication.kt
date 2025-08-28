@@ -8,6 +8,7 @@ import com.dezdeqness.core.player.di.CorePlayerModule
 import com.dezdeqness.home.di.HomeModule
 import com.dezdeqness.likedtracks.di.LikedTracksModule
 import com.dezdeqness.muzika.di.navigation.NavigationModule
+import com.dezdeqness.playlist.di.PlaylistModule
 import com.dezdeqness.shared.di.SharedModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
@@ -27,6 +28,7 @@ class MuzikaApplication : Application() {
                 AuthModule().module,
                 LikedTracksModule().module,
                 HomeModule().module,
+                PlaylistModule().module,
             )
         }
     }
