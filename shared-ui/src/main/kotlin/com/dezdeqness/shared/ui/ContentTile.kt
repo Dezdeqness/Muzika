@@ -53,7 +53,7 @@ fun ContentTile(
     ) {
         Box(contentAlignment = Alignment.Center) {
             AsyncImage(
-                remember(iconUrl) { iconUrl },
+                iconUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .padding(8.dp)

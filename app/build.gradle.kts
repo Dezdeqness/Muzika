@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -72,6 +73,7 @@ dependencies {
     implementation(project(":feature:player"))
     implementation(project(":feature:likedtracks"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:playlist"))
 
     implementation(project(":shared-data"))
     implementation(project(":shared-ui"))
@@ -99,6 +101,7 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.kotlinx.serialization)
 
     implementation(libs.core.ui)
     implementation(libs.koin.annotations)

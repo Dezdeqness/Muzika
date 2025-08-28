@@ -1,6 +1,6 @@
-package com.dezdeqness.home.presentation.model
+package com.dezdeqness.home.presentation
 
-data class HomePlaylistUiModel(
+data class PlaylistTransferObject(
     val id: Long,
     val title: String,
     val userName: String,

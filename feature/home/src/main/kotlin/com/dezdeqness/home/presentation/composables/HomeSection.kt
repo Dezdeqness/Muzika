@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dezdeqness.core.ui.views.header.Header
+import com.dezdeqness.home.presentation.PlaylistTransferObject
 import com.dezdeqness.home.presentation.model.HomePlaylistUiModel
 
 @Composable
@@ -15,6 +16,7 @@ fun HomeSection(
     modifier: Modifier = Modifier,
     title: String,
     items: List<HomePlaylistUiModel>,
+    onPlaylistClicked: (PlaylistTransferObject) -> Unit,
 ) {
     Column(modifier = modifier) {
         Header(title = title)
@@ -34,6 +36,7 @@ fun HomeSection(
                 HomeSectionItem(
                     modifier = Modifier.padding(start = paddingStart, end = paddingEnd),
                     item = item,
+                    onPlaylistClicked = onPlaylistClicked,
                 )
             }
         }

@@ -43,13 +43,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.core.ui.theme.AppTheme
-import com.dezdeqness.home.navigation.HOME_ROUTE
+import com.dezdeqness.home.navigation.Home
 import com.dezdeqness.home.navigation.homeScreen
-import com.dezdeqness.likedtracks.navigation.LIKED_ROUTE
+import com.dezdeqness.likedtracks.navigation.Liked
 import com.dezdeqness.likedtracks.navigation.likedScreen
 import com.dezdeqness.player.core.rememberBottomSheetState
 import com.dezdeqness.player.presentation.PlayerBottomSheet
 import com.dezdeqness.player.presentation.PlayerControllerManager
+import com.dezdeqness.playlist.navigation.Playlist
+import com.dezdeqness.playlist.navigation.playlistScreen
+import kotlinx.serialization.Serializable
 
 class MainActivity : AppCompatActivity() {
 
@@ -84,10 +87,10 @@ class MainActivity : AppCompatActivity() {
 
                     NavHost(
                         navController = rootController,
-                        startDestination = "root",
+                        startDestination = Root,
                         modifier = Modifier.fillMaxSize(),
                     ) {
-                        composable(route = "root") {
+                        composable<Root> {
                             val navController = rememberNavController()
                             val currentDestination =
                                 navController.currentBackStackEntryAsState().value?.destination?.route
@@ -148,12 +151,28 @@ class MainActivity : AppCompatActivity() {
 
                                     NavHost(
                                         navController = navController,
-                                        startDestination = HOME_ROUTE,
+                                        startDestination = Home,
                                         modifier = Modifier
                                             .fillMaxSize()
                                             .padding(top = padding.calculateTopPadding())
                                     ) {
-                                        homeScreen()
+                                        homeScreen(
+                                            onPlaylistClicked = {
+                                                navController.navigate(
+                                                    Playlist(
+                                                        id = it.id,
+                                                        title = it.title,
+                                                        userName = it.userName,
+                                                        imageUrl = it.imageUrl,
+                                                        urn = it.urn,
+                                                        description = it.description,
+                                                        duration = it.duration,
+                                                        tracksCount = it.tracksCount,
+                                                    )
+                                                )
+                                            }
+                                        )
+
                                         likedScreen(
                                             onPlaylistChanged = { items ->
                                                 val mediaItems = items.map { item ->
@@ -182,7 +201,10 @@ class MainActivity : AppCompatActivity() {
                                                 playbackConnection?.startPlay(index)
                                             }
                                         )
-                                        composable("settings") {
+
+                                        playlistScreen()
+
+                                        composable<Settings> {
                                             Box(
                                                 modifier = Modifier
                                                     .fillMaxSize()
@@ -229,8 +251,14 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-enum class AquaBottomTabModel(val title: String, val route: String) {
-    HOME("Home", HOME_ROUTE),
-    SAVED("Liked", LIKED_ROUTE),
-    SETTINGS("Settings", "settings")
+enum class AquaBottomTabModel(val title: String, val route: Any) {
+    HOME("Home", Home),
+    SAVED("Liked", Liked),
+    SETTINGS("Settings", Settings)
 }
+
+@Serializable
+object Root
+
+@Serializable
+object Settings

@@ -23,19 +23,34 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dezdeqness.core.ui.theme.AppTheme
 import com.dezdeqness.core.ui.views.image.AppImage
+import com.dezdeqness.home.presentation.PlaylistTransferObject
 import com.dezdeqness.home.presentation.model.HomePlaylistUiModel
 
 @Composable
 fun HomeSectionItem(
     modifier: Modifier = Modifier,
     item: HomePlaylistUiModel,
+    onPlaylistClicked: (PlaylistTransferObject) -> Unit,
 ) {
     Column(
         modifier = modifier
             .width(100.dp)
             .clip(RoundedCornerShape(6.dp))
             .clickable(
-                onClick = {},
+                onClick = {
+                    onPlaylistClicked.invoke(
+                        PlaylistTransferObject(
+                            id = item.id,
+                            urn = item.urn,
+                            title = item.title,
+                            description = item.description,
+                            userName = item.userName,
+                            duration = item.duration,
+                            tracksCount = item.tracksCount,
+                            imageUrl = item.imageUrl,
+                        )
+                    )
+                },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(color = AppTheme.colors.ripple),
             ),

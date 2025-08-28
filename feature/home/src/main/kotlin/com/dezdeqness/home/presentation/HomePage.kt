@@ -19,6 +19,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomePage(
     modifier: Modifier = Modifier,
     viewModel: HomePageViewModel = koinViewModel(),
+    onPlaylistClicked: (PlaylistTransferObject) -> Unit,
 ) {
     val state by viewModel.homeState.collectAsStateWithLifecycle()
 
@@ -47,6 +48,7 @@ fun HomePage(
                         HomeSection(
                             title = "Liked playlists",
                             items = state.liked,
+                            onPlaylistClicked = onPlaylistClicked,
                         )
                     }
                 }
@@ -54,18 +56,21 @@ fun HomePage(
                     HomeSection(
                         title = "Anime",
                         items = state.sectionAnime,
+                        onPlaylistClicked = onPlaylistClicked,
                     )
                 }
                 item {
                     HomeSection(
                         title = "Eurobeat",
                         items = state.sectionEurobeat,
+                        onPlaylistClicked = onPlaylistClicked,
                     )
                 }
                 item {
                     HomeSection(
                         title = "Phonk",
                         items = state.sectionPhonk,
+                        onPlaylistClicked = onPlaylistClicked,
                     )
                 }
             }
