@@ -20,8 +20,9 @@ class PlaylistRemoteDataSourceImpl(
                 "limit" to 20,
                 "linked_partitioning" to true,
                 "access" to "playable",
-                "cursor" to key.orEmpty(),
-            )
+                "offset" to (key ?: "0"),
+            ),
+            usn = usn,
         )
 
         if (response.isSuccessful) {

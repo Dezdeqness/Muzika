@@ -2,13 +2,16 @@ package com.dezdeqness.likedtracks.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.dezdeqness.core.dispatcher.CoroutineDispatcherProvider
 import com.dezdeqness.likedtracks.domain.LikedRepository
 import com.dezdeqness.likedtracks.presentation.mapper.LikedTrackMapper
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Provided
 
@@ -25,5 +28,10 @@ class LikedTracksViewModel(
             .map { it.map(likedTrackMapper::toUiModel) }
             .flowOn(coroutineDispatcherProvider.io())
             .cachedIn(viewModelScope)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Lazily,
+                initialValue = PagingData.empty()
+            )
 
 }

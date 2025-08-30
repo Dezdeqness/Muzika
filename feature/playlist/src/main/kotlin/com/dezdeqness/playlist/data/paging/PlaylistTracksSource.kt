@@ -24,7 +24,7 @@ class PlaylistTracksSource(
             }
 
             val state = result.getOrNull()!!
-            nextCursor = extractCursor(state.nextKey)
+            val nextCursor = extractCursor(state.nextKey)
 
             LoadResult.Page(
                 data = state.list,
@@ -42,10 +42,7 @@ class PlaylistTracksSource(
 
     private fun extractCursor(nextHref: String): String? {
         val uri = nextHref.toUri()
-        return uri.getQueryParameter("cursor")
+        return uri.getQueryParameter("offset")
     }
 
-    companion object {
-        private var nextCursor: String? = null
-    }
 }

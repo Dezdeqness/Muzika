@@ -3,6 +3,7 @@ package com.dezdeqness.playlist.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.dezdeqness.playlist.presentattion.PlaylistPage
+import com.dezdeqness.playlist.presentattion.model.PlaylistTrackUiModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,8 +19,15 @@ data class Playlist(
 )
 
 fun NavGraphBuilder.playlistScreen(
+    onBackClicked: () -> Unit,
+    onSongClick: (Int) -> Unit,
+    onPlaylistChanged: (List<PlaylistTrackUiModel>) -> Unit,
 ) {
     composable<Playlist> {
-        PlaylistPage()
+        PlaylistPage(
+            onBackClicked = onBackClicked,
+            onSongClick = onSongClick,
+            onPlaylistChanged = onPlaylistChanged,
+        )
     }
 }

@@ -37,6 +37,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -92,13 +95,12 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         composable<Root> {
                             val navController = rememberNavController()
-                            val currentDestination =
-                                navController.currentBackStackEntryAsState().value?.destination?.route
 
                             val animatedHeight by animateDpAsState(
                                 targetValue = 113.dp * (1f - playerBottomSheetState.progress),
                                 label = "BottomBarHeight"
                             )
+
                             Scaffold(
                                 bottomBar = {
                                     NavigationBar(
@@ -106,21 +108,29 @@ class MainActivity : AppCompatActivity() {
                                         containerColor = MaterialTheme.colorScheme.background,
                                         tonalElevation = 0.dp,
                                     ) {
+                                        val navBackStackEntry =
+                                            navController.currentBackStackEntryAsState().value
+                                        val currentDestination = navBackStackEntry?.destination
                                         AquaBottomTabModel.entries.forEach { item ->
+                                            val isSelected =
+                                                currentDestination?.hierarchy?.any {
+                                                    it.hasRoute(
+                                                        item.route::class
+                                                    )
+                                                } == true
+
                                             NavigationBarItem(
                                                 label = {
                                                     Text(item.title)
                                                 },
-                                                selected = currentDestination == item.route,
+                                                selected = isSelected,
                                                 onClick = {
-                                                    if (currentDestination != item.route) {
-                                                        navController.navigate(item.route) {
-                                                            popUpTo(navController.graph.startDestinationId) {
-                                                                saveState = true
-                                                            }
-                                                            launchSingleTop = true
-                                                            restoreState = true
+                                                    navController.navigate(item.route) {
+                                                        popUpTo(navController.graph.findStartDestination().id) {
+                                                            saveState = true
                                                         }
+                                                        launchSingleTop = true
+                                                        restoreState = true
                                                     }
                                                 },
                                                 icon = {
@@ -202,7 +212,35 @@ class MainActivity : AppCompatActivity() {
                                             }
                                         )
 
-                                        playlistScreen()
+                                        playlistScreen(
+                                            onBackClicked = navController::popBackStack,
+                                            onPlaylistChanged = { items ->
+                                                val mediaItems = items.map { item ->
+                                                    MediaItem
+                                                        .Builder()
+                                                        .setMediaId(item.id)
+                                                        .setUri(item.streamUrl)
+                                                        .setCustomCacheKey(item.id)
+                                                        .setTag(item)
+                                                        .setMediaMetadata(
+                                                            MediaMetadata
+                                                                .Builder()
+                                                                .setTitle(item.name)
+                                                                .setSubtitle(item.authorName)
+                                                                .setArtist(item.authorName)
+                                                                .setArtworkUri(item.iconImageUrl.toUri())
+                                                                .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
+                                                                .build()
+                                                        )
+                                                        .build()
+                                                }
+
+                                                playbackConnection?.updatePlaylist(mediaItems)
+                                            },
+                                            onSongClick = { index ->
+                                                playbackConnection?.startPlay(index)
+                                            }
+                                        )
 
                                         composable<Settings> {
                                             Box(
