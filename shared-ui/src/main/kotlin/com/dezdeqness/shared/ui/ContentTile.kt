@@ -146,18 +146,18 @@ fun ContentTile(
             }
         }
 
-        IconButton(
-            onClick = {
-                onMoreClicked()
-            },
-        ) {
-            Icon(
-                painterResource(id = R.drawable.ic_more),
-                tint = Color.Black,
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-            )
-        }
+//        IconButton(
+//            onClick = {
+//                onMoreClicked()
+//            },
+//        ) {
+//            Icon(
+//                painterResource(id = R.drawable.ic_more),
+//                tint = Color.Black,
+//                contentDescription = null,
+//                modifier = Modifier.size(24.dp),
+//            )
+//        }
 
     }
 }
