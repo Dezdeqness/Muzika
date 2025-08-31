@@ -4,10 +4,23 @@ on:
   push:
     tags:
       - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Version name'
+        required: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      KEYSTORE_FILE: keystore.jks
+      VERSION_NAME: ${{ github.event.inputs.version_name || github.ref_name }}
+      RELEASE_VERSION_CODE: ${{ github.event.inputs.release_code || 999 }}
 
     steps:
       - name: Checkout repo
@@ -21,18 +34,19 @@ jobs:
 
       - name: Decode keystore
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > keystore.jks
+          echo "$KEYSTORE_BASE64" | base64 --decode > $KEYSTORE_FILE
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
 
       - name: Build Release APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease -PversionName=$VERSION_NAME -PreleaseCode=$RELEASE_VERSION_CODE
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          VERSION_NAME: ${{ github.ref_name }}
-          GITHUB_KEYSTORE_FILE: keystore.jks
+          GITHUB_KEYSTORE_FILE: $KEYSTORE_FILE
+          VERSION_NAME: $VERSION_NAME
+          RELEASE_VERSION_CODE: $RELEASE_VERSION_CODE
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
