@@ -19,8 +19,8 @@ if (localPropsFile.exists()) {
     githubUsername = props.getProperty("github.username")
     githubToken = props.getProperty("github.token")
 } else {
-    githubUsername = System.getenv("GITHUB_USERNAME") ?: ""
-    githubToken = System.getenv("GITHUB_TOKEN") ?: ""
+    githubUsername = System.getenv("USERNAME") ?: ""
+    githubToken = System.getenv("TOKEN") ?: ""
 }
 
 dependencyResolutionManagement {
