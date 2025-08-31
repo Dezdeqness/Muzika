@@ -21,6 +21,8 @@ jobs:
       KEYSTORE_FILE: keystore.jks
       VERSION_NAME: ${{ github.event.inputs.version_name || github.ref_name }}
       RELEASE_VERSION_CODE: ${{ github.event.inputs.release_code || 999 }}
+      GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -50,6 +52,8 @@ jobs:
           GITHUB_KEYSTORE_FILE: $KEYSTORE_FILE
           VERSION_NAME: $VERSION_NAME
           RELEASE_VERSION_CODE: $RELEASE_VERSION_CODE
+          GITHUB_USERNAME: $GITHUB_USERNAME
+          GITHUB_TOKEN: $GITHUB_TOKEN
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

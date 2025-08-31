@@ -9,8 +9,19 @@ pluginManagement {
     }
 }
 
-val props = Properties()
-props.load(FileInputStream("local.properties"))
+var githubUsername: String
+var githubToken: String
+
+val localPropsFile = file("local.properties")
+if (localPropsFile.exists()) {
+    val props = Properties()
+    props.load(FileInputStream(localPropsFile))
+    githubUsername = props.getProperty("github.username")
+    githubToken = props.getProperty("github.token")
+} else {
+    githubUsername = System.getenv("GITHUB_USERNAME") ?: ""
+    githubToken = System.getenv("GITHUB_TOKEN") ?: ""
+}
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -21,8 +32,8 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/Dezdeqness/Android-Support-Things")
             credentials {
-                username = props["github.username"].toString()
-                password = props["github.token"].toString()
+                username = githubUsername
+                password = githubToken
             }
         }
     }
