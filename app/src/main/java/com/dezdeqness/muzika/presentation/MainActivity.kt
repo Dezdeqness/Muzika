@@ -8,8 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +25,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.LayoutDirection
@@ -55,6 +52,8 @@ import com.dezdeqness.player.presentation.PlayerBottomSheet
 import com.dezdeqness.player.presentation.PlayerControllerManager
 import com.dezdeqness.playlist.navigation.Playlist
 import com.dezdeqness.playlist.navigation.playlistScreen
+import com.dezdeqness.settings.navigation.Settings
+import com.dezdeqness.settings.navigation.settingsScreen
 import kotlinx.serialization.Serializable
 
 class MainActivity : AppCompatActivity() {
@@ -242,13 +241,7 @@ class MainActivity : AppCompatActivity() {
                                             }
                                         )
 
-                                        composable<Settings> {
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxSize()
-                                                    .background(Color.Cyan)
-                                            )
-                                        }
+                                        settingsScreen()
                                     }
 
                                     val currentMediaItem =
@@ -297,6 +290,3 @@ enum class AquaBottomTabModel(val title: String, val route: Any) {
 
 @Serializable
 object Root
-
-@Serializable
-object Settings

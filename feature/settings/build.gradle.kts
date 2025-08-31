@@ -64,10 +64,12 @@ dependencies {
     implementation(project(":common:core"))
     implementation(project(":common:core-player"))
     implementation(project(":shared-ui"))
+    implementation(libs.core.ui)
     implementation(libs.coil)
     implementation(libs.core.ui)
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)
     implementation(libs.viewmodel.saved.state)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization)
 }
