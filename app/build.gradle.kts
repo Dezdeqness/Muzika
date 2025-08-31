@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":feature:likedtracks"))
     implementation(project(":feature:home"))
     implementation(project(":feature:playlist"))
+    implementation(project(":feature:settings"))
 
     implementation(project(":shared-data"))
     implementation(project(":shared-ui"))
