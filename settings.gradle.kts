@@ -36,6 +36,7 @@ include(":feature:likedtracks")
 include(":feature:player")
 include(":feature:home")
 include(":feature:playlist")
+include(":feature:settings")
 
 include(":common:core-network")
 include(":common:core")
