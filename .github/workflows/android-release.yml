@@ -13,6 +13,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Aqua
 
     env:
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -39,25 +40,13 @@ jobs:
           echo "$KEYSTORE_BASE64" | base64 --decode > $KEYSTORE_FILE
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_FILE: app/keystore.jks
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
       - name: Build Release APK
-        run: ./gradlew assembleRelease \
-          -PversionName="$VERSION_NAME" \
-          -PreleaseCode="$RELEASE_VERSION_CODE" \
-          -DUSERNAME=$USERNAME \
-          -DTOKEN=$TOKEN
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          GITHUB_KEYSTORE_FILE: $KEYSTORE_FILE
-          VERSION_NAME: $VERSION_NAME
-          RELEASE_VERSION_CODE: $RELEASE_VERSION_CODE
-          USERNAME: $USERNAME
-          TOKEN: $TOKEN
+        run: ./gradlew assembleRelease -PversionName="$VERSION_NAME" -PreleaseCode="$RELEASE_VERSION_CODE"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
