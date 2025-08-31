@@ -21,8 +21,8 @@ jobs:
       KEYSTORE_FILE: keystore.jks
       VERSION_NAME: ${{ github.event.inputs.version_name || github.ref_name }}
       RELEASE_VERSION_CODE: ${{ github.event.inputs.release_code || 999 }}
-      USERNAME: $USERNAME
-      TOKEN: $TOKEN
+      USERNAME: ${{ secrets.USERNAME }}
+      TOKEN: ${{ secrets.TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -44,7 +44,11 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build Release APK
-        run: ./gradlew assembleRelease -PversionName=$VERSION_NAME -PreleaseCode=$RELEASE_VERSION_CODE
+        run: ./gradlew assembleRelease \
+          -PversionName="$VERSION_NAME" \
+          -PreleaseCode="$RELEASE_VERSION_CODE" \
+          -DUSERNAME=$USERNAME \
+          -DTOKEN=$TOKEN
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}

@@ -17,7 +17,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val versionNameFromEnv = System.getenv("VERSION_NAME") ?: "1.0.0"
+        val versionNameFromEnv = (project.findProperty("VERSION_NAME") as? String) ?: "1.0.0"
         versionName = versionNameFromEnv
 
         val (major, minor, patch) = versionNameFromEnv
