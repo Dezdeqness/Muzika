@@ -23,6 +23,7 @@ import coil.imageLoader
 import com.dezdeqness.core.ui.theme.AppTheme
 import com.dezdeqness.core.ui.views.settings.HeaderSettingsView
 import com.dezdeqness.core.ui.views.settings.TextSettingsView
+import com.dezdeqness.settings.core.LocalVersionName
 import com.dezdeqness.settings.core.formatFileSize
 import com.dezdeqness.settings.domain.models.ImageCacheMaxSize
 import com.dezdeqness.settings.presentation.composabes.ListPreferencesDialog
@@ -38,6 +39,7 @@ fun SettingsPage(
     settingsViewModel: SettingsViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
+    val versionName = LocalVersionName.current
 
     val imageDiskCache = context.imageLoader.diskCache ?: return
 
@@ -128,7 +130,7 @@ fun SettingsPage(
         item {
             TextSettingsView(
                 title = "Version",
-                subtitle = "0.1.0",
+                subtitle = versionName,
             )
         }
     }

@@ -14,19 +14,58 @@ android {
         applicationId = "com.dezdeqness.muzika"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val versionNameFromEnv = System.getenv("VERSION_NAME") ?: "1.0.0"
+        versionName = versionNameFromEnv
+
+        val (major, minor, patch) = versionNameFromEnv
+            .split(".")
+            .map { it.toInt() }
+            .let { Triple(it[0], it[1], it[2]) }
+
+        println("Version is $versionName")
+        println("Major: $major")
+        println("Minor: $minor")
+        println("Patch: $patch")
+
+        versionCode = major * 10_000_000 + minor * 100_000 + patch * 1_000
+        println("Version code: $versionCode")
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getProperty("signing.store.file") ?: return@create)
+            storePassword = System.getProperty("signing.store.password")
+            keyAlias = System.getProperty("signing.key.alias")
+            keyPassword = System.getProperty("signing.key.password")
+        }
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
+        getByName("release") {
+            isMinifyEnabled = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
+        }
+
+        getByName("debug") {
+            isMinifyEnabled = false
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+        }
+
+        create("qa") {
+            isMinifyEnabled = true
+            isDebuggable = false
+            applicationIdSuffix = ".test"
+            matchingFallbacks.add("debug")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     java {
@@ -45,6 +84,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.toString()
@@ -60,7 +100,7 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
     arg("room.incremental", "true")
     arg("room.expandProjection", "true")
-    arg("KOIN_CONFIG_CHECK","true")
+    arg("KOIN_CONFIG_CHECK", "true")
 }
 
 dependencies {

@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,11 +48,13 @@ import com.dezdeqness.home.navigation.Home
 import com.dezdeqness.home.navigation.homeScreen
 import com.dezdeqness.likedtracks.navigation.Liked
 import com.dezdeqness.likedtracks.navigation.likedScreen
+import com.dezdeqness.muzika.BuildConfig
 import com.dezdeqness.player.core.rememberBottomSheetState
 import com.dezdeqness.player.presentation.PlayerBottomSheet
 import com.dezdeqness.player.presentation.PlayerControllerManager
 import com.dezdeqness.playlist.navigation.Playlist
 import com.dezdeqness.playlist.navigation.playlistScreen
+import com.dezdeqness.settings.core.LocalVersionName
 import com.dezdeqness.settings.navigation.Settings
 import com.dezdeqness.settings.navigation.settingsScreen
 import kotlinx.serialization.Serializable
@@ -76,191 +79,202 @@ class MainActivity : AppCompatActivity() {
             val density = LocalDensity.current
             val heightPx = LocalWindowInfo.current.containerSize.height
             val heightDp = with(density) { heightPx.toDp() }
+            CompositionLocalProvider(
+                LocalVersionName provides BuildConfig.VERSION_NAME,
+            ) {
+                AppTheme {
+                    val playbackConnection by controllerManager.playbackConnection.collectAsStateWithLifecycle()
 
-            AppTheme {
-                val playbackConnection by controllerManager.playbackConnection.collectAsStateWithLifecycle()
+                    CompositionLocalProvider(LocalPlaybackConnection provides playbackConnection) {
+                        val playerBottomSheetState = rememberBottomSheetState(
+                            dismissedBound = 0.dp,
+                            collapsedBound = 72.dp,
+                            expandedBound = heightDp,
+                        )
 
-                CompositionLocalProvider(LocalPlaybackConnection provides playbackConnection) {
-                    val playerBottomSheetState = rememberBottomSheetState(
-                        dismissedBound = 0.dp,
-                        collapsedBound = 72.dp,
-                        expandedBound = heightDp,
-                    )
+                        NavHost(
+                            navController = rootController,
+                            startDestination = Root,
+                            modifier = Modifier.fillMaxSize(),
+                        ) {
+                            composable<Root> {
+                                val navController = rememberNavController()
 
-                    NavHost(
-                        navController = rootController,
-                        startDestination = Root,
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        composable<Root> {
-                            val navController = rememberNavController()
-
-                            val animatedHeight by animateDpAsState(
-                                targetValue = 113.dp * (1f - playerBottomSheetState.progress),
-                                label = "BottomBarHeight"
-                            )
-
-                            Scaffold(
-                                bottomBar = {
-                                    NavigationBar(
-                                        modifier = Modifier.height(animatedHeight),
-                                        containerColor = MaterialTheme.colorScheme.background,
-                                        tonalElevation = 0.dp,
-                                    ) {
-                                        val navBackStackEntry =
-                                            navController.currentBackStackEntryAsState().value
-                                        val currentDestination = navBackStackEntry?.destination
-                                        AquaBottomTabModel.entries.forEach { item ->
-                                            val isSelected =
-                                                currentDestination?.hierarchy?.any {
-                                                    it.hasRoute(
-                                                        item.route::class
-                                                    )
-                                                } == true
-
-                                            NavigationBarItem(
-                                                label = {
-                                                    Text(item.title)
-                                                },
-                                                selected = isSelected,
-                                                onClick = {
-                                                    navController.navigate(item.route) {
-                                                        popUpTo(navController.graph.findStartDestination().id) {
-                                                            saveState = true
-                                                        }
-                                                        launchSingleTop = true
-                                                        restoreState = true
-                                                    }
-                                                },
-                                                icon = {
-
-                                                },
-                                            )
-                                        }
-                                    }
-                                }
-                            ) { padding ->
-
-                                val hostPadding = PaddingValues(
-                                    start = padding.calculateLeftPadding(LayoutDirection.Ltr),
-                                    end = padding.calculateRightPadding(LayoutDirection.Ltr),
-                                    bottom = padding.calculateBottomPadding(),
+                                val animatedHeight by animateDpAsState(
+                                    targetValue = 113.dp * (1f - playerBottomSheetState.progress),
+                                    label = "BottomBarHeight"
                                 )
-                                BoxWithConstraints(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(hostPadding)
-                                ) {
-                                    val height = remember {
-                                        derivedStateOf { maxHeight }
-                                    }
-                                    LaunchedEffect(height.value) {
-                                        playerBottomSheetState.updateBounds(0.dp, height.value)
-                                    }
 
-                                    NavHost(
-                                        navController = navController,
-                                        startDestination = Home,
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(top = padding.calculateTopPadding())
-                                    ) {
-                                        homeScreen(
-                                            onPlaylistClicked = {
-                                                navController.navigate(
-                                                    Playlist(
-                                                        id = it.id,
-                                                        title = it.title,
-                                                        userName = it.userName,
-                                                        imageUrl = it.imageUrl,
-                                                        urn = it.urn,
-                                                        description = it.description,
-                                                        duration = it.duration,
-                                                        tracksCount = it.tracksCount,
-                                                    )
+                                Scaffold(
+                                    bottomBar = {
+                                        NavigationBar(
+                                            modifier = Modifier.height(animatedHeight),
+                                            containerColor = MaterialTheme.colorScheme.background,
+                                            tonalElevation = 0.dp,
+                                        ) {
+                                            val navBackStackEntry =
+                                                navController.currentBackStackEntryAsState().value
+                                            val currentDestination =
+                                                navBackStackEntry?.destination
+                                            AquaBottomTabModel.entries.forEach { item ->
+                                                val isSelected =
+                                                    currentDestination?.hierarchy?.any {
+                                                        it.hasRoute(
+                                                            item.route::class
+                                                        )
+                                                    } == true
+
+                                                NavigationBarItem(
+                                                    label = {
+                                                        Text(item.title)
+                                                    },
+                                                    selected = isSelected,
+                                                    onClick = {
+                                                        navController.navigate(item.route) {
+                                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                                saveState = true
+                                                            }
+                                                            launchSingleTop = true
+                                                            restoreState = true
+                                                        }
+                                                    },
+                                                    icon = {
+
+                                                    },
                                                 )
                                             }
-                                        )
-
-                                        likedScreen(
-                                            onPlaylistChanged = { items ->
-                                                val mediaItems = items.map { item ->
-                                                    MediaItem
-                                                        .Builder()
-                                                        .setMediaId(item.id)
-                                                        .setUri(item.streamUrl)
-                                                        .setCustomCacheKey(item.id)
-                                                        .setTag(item)
-                                                        .setMediaMetadata(
-                                                            MediaMetadata
-                                                                .Builder()
-                                                                .setTitle(item.name)
-                                                                .setSubtitle(item.authorName)
-                                                                .setArtist(item.authorName)
-                                                                .setArtworkUri(item.iconImageUrl.toUri())
-                                                                .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
-                                                                .build()
-                                                        )
-                                                        .build()
-                                                }
-
-                                                playbackConnection?.updatePlaylist(mediaItems)
-                                            },
-                                            onSongClick = { index ->
-                                                playbackConnection?.startPlay(index)
-                                            }
-                                        )
-
-                                        playlistScreen(
-                                            onBackClicked = navController::popBackStack,
-                                            onPlaylistChanged = { items ->
-                                                val mediaItems = items.map { item ->
-                                                    MediaItem
-                                                        .Builder()
-                                                        .setMediaId(item.id)
-                                                        .setUri(item.streamUrl)
-                                                        .setCustomCacheKey(item.id)
-                                                        .setTag(item)
-                                                        .setMediaMetadata(
-                                                            MediaMetadata
-                                                                .Builder()
-                                                                .setTitle(item.name)
-                                                                .setSubtitle(item.authorName)
-                                                                .setArtist(item.authorName)
-                                                                .setArtworkUri(item.iconImageUrl.toUri())
-                                                                .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
-                                                                .build()
-                                                        )
-                                                        .build()
-                                                }
-
-                                                playbackConnection?.updatePlaylist(mediaItems)
-                                            },
-                                            onSongClick = { index ->
-                                                playbackConnection?.startPlay(index)
-                                            }
-                                        )
-
-                                        settingsScreen()
-                                    }
-
-                                    val currentMediaItem =
-                                        playbackConnection?.currentMediaItem?.collectAsStateWithLifecycle()
-
-                                    LaunchedEffect(currentMediaItem?.value) {
-                                        val mediaItem = playbackConnection?.currentMediaItem
-                                        if (mediaItem == null) {
-                                            if (!playerBottomSheetState.isDismissed) {
-                                                playerBottomSheetState.dismiss()
-                                            }
-                                        } else {
-                                            if (playerBottomSheetState.isDismissed) {
-                                                playerBottomSheetState.collapseSoft()
-                                            }
                                         }
                                     }
+                                ) { padding ->
 
-                                    PlayerBottomSheet(state = playerBottomSheetState)
+                                    val hostPadding = PaddingValues(
+                                        start = padding.calculateLeftPadding(LayoutDirection.Ltr),
+                                        end = padding.calculateRightPadding(LayoutDirection.Ltr),
+                                        bottom = padding.calculateBottomPadding(),
+                                    )
+                                    BoxWithConstraints(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(hostPadding)
+                                    ) {
+                                        val height = remember {
+                                            derivedStateOf { maxHeight }
+                                        }
+                                        LaunchedEffect(height.value) {
+                                            playerBottomSheetState.updateBounds(
+                                                0.dp,
+                                                height.value
+                                            )
+                                        }
+
+                                        NavHost(
+                                            navController = navController,
+                                            startDestination = Home,
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .padding(top = padding.calculateTopPadding())
+                                        ) {
+                                            homeScreen(
+                                                onPlaylistClicked = {
+                                                    navController.navigate(
+                                                        Playlist(
+                                                            id = it.id,
+                                                            title = it.title,
+                                                            userName = it.userName,
+                                                            imageUrl = it.imageUrl,
+                                                            urn = it.urn,
+                                                            description = it.description,
+                                                            duration = it.duration,
+                                                            tracksCount = it.tracksCount,
+                                                        )
+                                                    )
+                                                }
+                                            )
+
+                                            likedScreen(
+                                                onPlaylistChanged = { items ->
+                                                    val mediaItems = items.map { item ->
+                                                        MediaItem
+                                                            .Builder()
+                                                            .setMediaId(item.id)
+                                                            .setUri(item.streamUrl)
+                                                            .setCustomCacheKey(item.id)
+                                                            .setTag(item)
+                                                            .setMediaMetadata(
+                                                                MediaMetadata
+                                                                    .Builder()
+                                                                    .setTitle(item.name)
+                                                                    .setSubtitle(item.authorName)
+                                                                    .setArtist(item.authorName)
+                                                                    .setArtworkUri(item.iconImageUrl.toUri())
+                                                                    .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
+                                                                    .build()
+                                                            )
+                                                            .build()
+                                                    }
+
+                                                    playbackConnection?.updatePlaylist(
+                                                        mediaItems
+                                                    )
+                                                },
+                                                onSongClick = { index ->
+                                                    playbackConnection?.startPlay(index)
+                                                }
+                                            )
+
+                                            playlistScreen(
+                                                onBackClicked = navController::popBackStack,
+                                                onPlaylistChanged = { items ->
+                                                    val mediaItems = items.map { item ->
+                                                        MediaItem
+                                                            .Builder()
+                                                            .setMediaId(item.id)
+                                                            .setUri(item.streamUrl)
+                                                            .setCustomCacheKey(item.id)
+                                                            .setTag(item)
+                                                            .setMediaMetadata(
+                                                                MediaMetadata
+                                                                    .Builder()
+                                                                    .setTitle(item.name)
+                                                                    .setSubtitle(item.authorName)
+                                                                    .setArtist(item.authorName)
+                                                                    .setArtworkUri(item.iconImageUrl.toUri())
+                                                                    .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
+                                                                    .build()
+                                                            )
+                                                            .build()
+                                                    }
+
+                                                    playbackConnection?.updatePlaylist(
+                                                        mediaItems
+                                                    )
+                                                },
+                                                onSongClick = { index ->
+                                                    playbackConnection?.startPlay(index)
+                                                }
+                                            )
+
+                                            settingsScreen()
+                                        }
+
+                                        val currentMediaItem =
+                                            playbackConnection?.currentMediaItem?.collectAsStateWithLifecycle()
+
+                                        LaunchedEffect(currentMediaItem?.value) {
+                                            val mediaItem = playbackConnection?.currentMediaItem
+                                            if (mediaItem == null) {
+                                                if (!playerBottomSheetState.isDismissed) {
+                                                    playerBottomSheetState.dismiss()
+                                                }
+                                            } else {
+                                                if (playerBottomSheetState.isDismissed) {
+                                                    playerBottomSheetState.collapseSoft()
+                                                }
+                                            }
+                                        }
+
+                                        PlayerBottomSheet(state = playerBottomSheetState)
+                                    }
                                 }
                             }
                         }
