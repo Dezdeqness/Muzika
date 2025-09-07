@@ -29,13 +29,13 @@ import org.koin.core.context.GlobalContext.startKoin
 import org.koin.ksp.generated.module
 import kotlin.coroutines.CoroutineContext
 
-class AquaApplication : Application(), ImageLoaderFactory, CoroutineScope {
+class FonoApplication : Application(), ImageLoaderFactory, CoroutineScope {
     private val settingsRepository: SettingsRepository by inject()
 
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            androidContext(this@AquaApplication)
+            androidContext(this@FonoApplication)
             modules(
                 CoreModule().module,
                 CorePlayerModule().module,
