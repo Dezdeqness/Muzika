@@ -46,4 +46,5 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(platform(libs.compose.bom))
     implementation(libs.coil)
+    implementation(libs.core.ui)
 }

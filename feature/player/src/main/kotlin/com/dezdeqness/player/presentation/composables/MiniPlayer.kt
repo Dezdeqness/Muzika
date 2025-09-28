@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -33,9 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.Player
 import androidx.palette.graphics.Palette
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.asDrawable
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
+import com.dezdeqness.core.ui.views.image.AppImage
+import com.dezdeqness.core.ui.views.image.LocalAstImageLoader
 import com.dezdeqness.shared.ui.R
 import kotlinx.coroutines.delay
 
@@ -45,6 +51,8 @@ fun MiniPlayer(
     onBackgroundColorChanged: (Color) -> Unit,
 ) {
     val context = LocalContext.current
+
+    val imageLoader = LocalAstImageLoader.current
 
     val playbackConnection = LocalPlaybackConnection.current ?: return
 
@@ -90,12 +98,13 @@ fun MiniPlayer(
                 AsyncImage(
                     request,
                     contentDescription = null,
+                    imageLoader = imageLoader,
                     modifier = Modifier
                         .padding(8.dp)
                         .size(48.dp)
                         .clip(RoundedCornerShape(4.dp)),
                     onSuccess = { success ->
-                        val drawable = success.result.drawable
+                        val drawable = success.result.image.asDrawable(context.resources)
                         val bitmap = (drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
                         bitmap?.let {
                             val colorInt = Palette.from(it)

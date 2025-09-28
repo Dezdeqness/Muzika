@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -17,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.dezdeqness.core.ui.theme.AppTheme
+import com.dezdeqness.core.ui.views.image.AppImage
 import com.dezdeqness.playlist.presentattion.PlaylistPageState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,12 +37,13 @@ fun PlaylistHeader(
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            AsyncImage(
-                state.imageUrl,
-                contentDescription = null,
+            AppImage(
+                data = state.imageUrl,
                 modifier = Modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(4.dp)),
+                errorVector = Icons.Default.Lock,
+                placeholderVector = Icons.Default.Lock,
             )
 
             Column(modifier = Modifier.fillMaxHeight()) {

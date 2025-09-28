@@ -70,7 +70,6 @@ dependencies {
     implementation(project(":common:core-player"))
     implementation(project(":shared-data"))
     implementation(project(":shared-ui"))
-    implementation(libs.coil)
     implementation(libs.core.ui)
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)

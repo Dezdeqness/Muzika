@@ -58,6 +58,7 @@ dependencies {
     api(project(":common:core-player"))
     implementation(project(":common:core"))
     implementation(project(":shared-ui"))
-    implementation(libs.coil)
     implementation(libs.androidx.palette.ktx)
+    implementation(libs.core.ui)
+    implementation(libs.coil)
 }

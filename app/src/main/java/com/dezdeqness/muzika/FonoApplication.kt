@@ -5,8 +5,11 @@ import android.content.Context
 import android.os.Build
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
+import coil3.annotation.DelicateCoilApi
 import coil3.disk.DiskCache
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.allowHardware
+import coil3.util.DebugLogger
 import com.dezdeqness.auth.di.AuthModule
 import com.dezdeqness.core.di.CoreModule
 import com.dezdeqness.core.network.di.CoreNetworkModule
@@ -37,6 +40,7 @@ class FonoApplication :
     CoroutineScope {
     private val settingsRepository: SettingsRepository by inject()
 
+    @OptIn(DelicateCoilApi::class)
     override fun onCreate() {
         super.onCreate()
         startKoin {
@@ -59,7 +63,7 @@ class FonoApplication :
             settingsRepository
                 .observePreference(ImageCacheMaxSize)
                 .collect { cacheMb ->
-                    SingletonImageLoader.setSafe {
+                    SingletonImageLoader.setUnsafe {
                        createImageLoader(cacheMb)
                     }
                 }
@@ -70,7 +74,12 @@ class FonoApplication :
         runBlocking { settingsRepository.getPreference(ImageCacheMaxSize) }
     )
 
-    private fun createImageLoader(cacheSizeMb: Int) = ImageLoader.Builder(this)
+    private fun createImageLoader(cacheSizeMb: Int) = ImageLoader
+        .Builder(this)
+        .components {
+            add(OkHttpNetworkFetcherFactory())
+        }
+        .logger(DebugLogger())
         .allowHardware(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         .diskCache(
             DiskCache.Builder()

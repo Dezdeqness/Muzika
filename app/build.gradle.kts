@@ -134,6 +134,7 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.coil)
     implementation(libs.coil.core)
+    implementation(libs.coil.network)
     debugImplementation(libs.ui.tooling)
 
     implementation(libs.viewmodel.ktx)

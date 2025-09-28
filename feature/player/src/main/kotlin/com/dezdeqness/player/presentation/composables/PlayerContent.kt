@@ -44,9 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.Player
 import androidx.palette.graphics.Palette
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.asDrawable
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
+import com.dezdeqness.core.ui.views.image.LocalAstImageLoader
 import com.dezdeqness.core.utils.TimeUtils
 import com.dezdeqness.player.core.BottomSheetState
 import com.dezdeqness.shared.ui.R
@@ -60,6 +63,8 @@ fun PlayerContent(
     state: BottomSheetState,
 ) {
     val context = LocalContext.current
+
+    val imageLoader = LocalAstImageLoader.current
 
     val playbackConnection = LocalPlaybackConnection.current ?: return
 
@@ -135,13 +140,14 @@ fun PlayerContent(
                 AsyncImage(
                     request,
                     contentDescription = null,
+                    imageLoader = imageLoader,
                     modifier = Modifier
                         .padding(8.dp)
                         .height(350.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp)),
                     onSuccess = { success ->
-                        val drawable = success.result.drawable
+                        val drawable = success.result.image.asDrawable(context.resources)
                         val bitmap = (drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
                         bitmap?.let {
                             val colorInt = Palette.from(it)

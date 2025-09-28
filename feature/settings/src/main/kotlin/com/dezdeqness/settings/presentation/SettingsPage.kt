@@ -96,8 +96,8 @@ fun SettingsPage(
                     selectedValue = imageCacheMaxSize,
                     valueText = { formatFileSize(it * 1024 * 1024L) },
                     onValueSelected = {
-                        isDialogOpened = false
                         settingsViewModel.set(ImageCacheMaxSize, it)
+                        isDialogOpened = false
                     },
                     onDismiss = {
                         isDialogOpened = false
