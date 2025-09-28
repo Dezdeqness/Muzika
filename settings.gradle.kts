@@ -42,7 +42,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Aqua"
+rootProject.name = "Fono"
 include(":app")
 
 include(":feature:auth")

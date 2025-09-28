@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,8 +41,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil3.imageLoader
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.core.ui.theme.AppTheme
+import com.dezdeqness.core.ui.views.image.LocalAstImageLoader
 import com.dezdeqness.home.navigation.Home
 import com.dezdeqness.home.navigation.homeScreen
 import com.dezdeqness.likedtracks.navigation.Liked
@@ -81,6 +82,7 @@ class MainActivity : AppCompatActivity() {
             val heightDp = with(density) { heightPx.toDp() }
             CompositionLocalProvider(
                 LocalVersionName provides BuildConfig.VERSION_NAME,
+                LocalAstImageLoader provides this.imageLoader,
             ) {
                 AppTheme {
                     val playbackConnection by controllerManager.playbackConnection.collectAsStateWithLifecycle()

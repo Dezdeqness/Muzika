@@ -133,6 +133,7 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.compose.navigation)
     implementation(libs.coil)
+    implementation(libs.coil.core)
     debugImplementation(libs.ui.tooling)
 
     implementation(libs.viewmodel.ktx)

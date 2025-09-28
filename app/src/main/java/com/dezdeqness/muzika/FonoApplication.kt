@@ -1,11 +1,12 @@
 package com.dezdeqness.muzika
 
 import android.app.Application
+import android.content.Context
 import android.os.Build
-import coil.Coil
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.disk.DiskCache
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
+import coil3.disk.DiskCache
+import coil3.request.allowHardware
 import com.dezdeqness.auth.di.AuthModule
 import com.dezdeqness.core.di.CoreModule
 import com.dezdeqness.core.network.di.CoreNetworkModule
@@ -23,13 +24,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import okio.Path.Companion.toOkioPath
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.ksp.generated.module
 import kotlin.coroutines.CoroutineContext
 
-class FonoApplication : Application(), ImageLoaderFactory, CoroutineScope {
+class FonoApplication :
+    Application(),
+    SingletonImageLoader.Factory,
+    CoroutineScope {
     private val settingsRepository: SettingsRepository by inject()
 
     override fun onCreate() {
@@ -54,12 +59,14 @@ class FonoApplication : Application(), ImageLoaderFactory, CoroutineScope {
             settingsRepository
                 .observePreference(ImageCacheMaxSize)
                 .collect { cacheMb ->
-                    Coil.setImageLoader(createImageLoader(cacheMb))
+                    SingletonImageLoader.setSafe {
+                       createImageLoader(cacheMb)
+                    }
                 }
         }
     }
 
-    override fun newImageLoader() = createImageLoader(
+    override fun newImageLoader(context: Context) = createImageLoader(
         runBlocking { settingsRepository.getPreference(ImageCacheMaxSize) }
     )
 
@@ -67,7 +74,7 @@ class FonoApplication : Application(), ImageLoaderFactory, CoroutineScope {
         .allowHardware(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         .diskCache(
             DiskCache.Builder()
-                .directory(cacheDir.resolve("coil"))
+                .directory(cacheDir.resolve("coil").toOkioPath())
                 .maxSizeBytes(cacheSizeMb * 1024 * 1024L)
                 .build()
         )
