@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -18,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.unit.dp
 import com.dezdeqness.core.ui.theme.AppTheme
 import com.dezdeqness.core.ui.views.image.AppImage
@@ -42,8 +41,8 @@ fun PlaylistHeader(
                 modifier = Modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                errorVector = Icons.Default.Lock,
-                placeholderVector = Icons.Default.Lock,
+                placeholder = ColorPainter(AppTheme.colors.onSurface),
+                error = ColorPainter(AppTheme.colors.onSurface),
             )
 
             Column(modifier = Modifier.fillMaxHeight()) {

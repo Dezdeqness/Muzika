@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -36,12 +34,10 @@ import androidx.compose.ui.unit.sp
 import androidx.media3.common.Player
 import androidx.palette.graphics.Palette
 import coil3.asDrawable
-import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.core.ui.views.image.AppImage
-import com.dezdeqness.core.ui.views.image.LocalAstImageLoader
 import com.dezdeqness.shared.ui.R
 import kotlinx.coroutines.delay
 
@@ -51,8 +47,6 @@ fun MiniPlayer(
     onBackgroundColorChanged: (Color) -> Unit,
 ) {
     val context = LocalContext.current
-
-    val imageLoader = LocalAstImageLoader.current
 
     val playbackConnection = LocalPlaybackConnection.current ?: return
 
@@ -95,10 +89,8 @@ fun MiniPlayer(
                         .allowHardware(false)
                         .build()
                 }
-                AsyncImage(
-                    request,
-                    contentDescription = null,
-                    imageLoader = imageLoader,
+                AppImage(
+                    request = request,
                     modifier = Modifier
                         .padding(8.dp)
                         .size(48.dp)
