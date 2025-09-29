@@ -9,8 +9,11 @@ import kotlinx.serialization.Serializable
 object Settings
 
 fun NavGraphBuilder.settingsScreen(
+    onBackClick: () -> Unit,
 ) {
     composable<Settings> {
-        SettingsPage()
+        SettingsPage(
+            onBackClick = onBackClick,
+        )
     }
 }

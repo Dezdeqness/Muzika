@@ -220,7 +220,7 @@ class MainActivity : AppCompatActivity() {
                                                 }
                                             )
 
-                                            settingsScreen()
+                                            settingsScreen(navController::popBackStack)
                                         }
 
                                         val currentMediaItem =

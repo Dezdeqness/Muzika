@@ -1,8 +1,11 @@
 package com.dezdeqness.muzika
 
 import android.app.Application
+import android.app.UiModeManager.MODE_NIGHT_NO
+import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.Context
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
@@ -20,11 +23,12 @@ import com.dezdeqness.muzika.di.navigation.NavigationModule
 import com.dezdeqness.playlist.di.PlaylistModule
 import com.dezdeqness.settings.di.SettingsModule
 import com.dezdeqness.settings.domain.models.ImageCacheMaxSize
+import com.dezdeqness.settings.domain.models.NightThemePreference
 import com.dezdeqness.settings.domain.repository.SettingsRepository
 import com.dezdeqness.shared.di.SharedModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okio.Path.Companion.toOkioPath
@@ -68,6 +72,19 @@ class FonoApplication :
                     }
                 }
         }
+
+        launch {
+            settingsRepository
+                .observePreference(NightThemePreference)
+                .collect {
+                    val themeMode = if (it) {
+                        MODE_NIGHT_YES
+                    } else {
+                        MODE_NIGHT_NO
+                    }
+                    AppCompatDelegate.setDefaultNightMode(themeMode)
+                }
+        }
     }
 
     override fun newImageLoader(context: Context) = createImageLoader(
@@ -91,5 +108,5 @@ class FonoApplication :
 
 
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + Job()
+        get() = Dispatchers.Main + SupervisorJob()
 }
