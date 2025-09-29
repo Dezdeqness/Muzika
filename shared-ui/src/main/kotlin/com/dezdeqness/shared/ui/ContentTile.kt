@@ -130,7 +130,7 @@ fun ContentTile(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (isDownloaded) {
                     Icon(
-                        painterResource(id = R.drawable.ic_download_offline),
+                        painterResource(id = R.drawable.ic_download),
                         tint = Color.Black,
                         contentDescription = null,
                         modifier = Modifier

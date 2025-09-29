@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -218,7 +216,7 @@ fun PlayerContent(
             ) {
                 IconButton(onClick = { playbackConnection.previousSong() }) {
                     Icon(
-                        Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        painterResource(R.drawable.ic_previous),
                         tint = Color.White,
                         contentDescription = "Previous",
                         modifier = Modifier.size(24.dp),
@@ -234,13 +232,13 @@ fun PlayerContent(
                         painterResource(id = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_resume),
                         tint = Color.White,
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(36.dp),
                     )
                 }
 
                 IconButton(onClick = { playbackConnection.nextSong() }) {
                     Icon(
-                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        painterResource(R.drawable.ic_next),
                         tint = Color.White,
                         contentDescription = "Previous",
                         modifier = Modifier.size(24.dp),
