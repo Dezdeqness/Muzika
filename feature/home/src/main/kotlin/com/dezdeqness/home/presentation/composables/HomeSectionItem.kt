@@ -33,7 +33,7 @@ fun HomeSectionItem(
 ) {
     Column(
         modifier = modifier
-            .width(100.dp)
+            .width(150.dp)
             .clip(RoundedCornerShape(6.dp))
             .clickable(
                 onClick = {
@@ -60,7 +60,7 @@ fun HomeSectionItem(
                 shape = RoundedCornerShape(6.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(150.dp)
                     .align(alignment = Alignment.Center),
                 placeholder = ColorPainter(AppTheme.colors.onSurface),
                 error = ColorPainter(AppTheme.colors.onSurface),
@@ -76,14 +76,14 @@ fun HomeSectionItem(
                 color = AppTheme.colors.textPrimary,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
-                style = AppTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodySmall,
             )
 
             Text(
                 text = "",
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 2,
-                style = AppTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
             )
