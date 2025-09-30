@@ -55,6 +55,7 @@ include(":feature:settings")
 include(":common:core-network")
 include(":common:core")
 include(":common:core-player")
+include(":common:core-ui")
 
 include(":shared-data")
 include(":shared-ui")

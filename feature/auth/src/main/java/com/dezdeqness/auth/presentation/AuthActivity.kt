@@ -4,10 +4,10 @@ import android.content.Intent
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.MaterialTheme
 import androidx.core.bundle.Bundle
 import com.dezdeqness.auth.navigation.AuthNavigation
 import com.dezdeqness.auth.presentation.ui.AuthPage
+import com.dezdeqness.core.ui.theme.FonoTheme
 import org.koin.android.ext.android.inject
 
 class AuthActivity : AppCompatActivity() {
@@ -21,7 +21,7 @@ class AuthActivity : AppCompatActivity() {
         handleDeepLink(intent)
 
         setContent {
-            MaterialTheme {
+            FonoTheme {
                 AuthPage(
                     viewModel.authState,
                     viewModel.events,

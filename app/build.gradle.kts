@@ -121,6 +121,7 @@ dependencies {
 
     implementation(project(":common:core-network"))
     implementation(project(":common:core"))
+    implementation(project(":common:core-ui"))
 
     implementation(libs.lifecycle.runtime.ktx)
 

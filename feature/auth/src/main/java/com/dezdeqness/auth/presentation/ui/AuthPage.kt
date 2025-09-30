@@ -1,6 +1,6 @@
 package com.dezdeqness.auth.presentation.ui
 
-import androidx.browser.customtabs.CustomTabsIntent.*
+import androidx.browser.customtabs.CustomTabsIntent.Builder
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,12 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,9 +28,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
@@ -44,6 +41,11 @@ import com.dezdeqness.auth.presentation.AuthEvent
 import com.dezdeqness.auth.presentation.AuthState
 import com.dezdeqness.auth.presentation.ScreenState
 import com.dezdeqness.auth.utils.CollectEvents
+import com.dezdeqness.core.ui.R
+import com.dezdeqness.core.ui.theme.AppTheme
+import com.dezdeqness.core.ui.theme.FonoTheme
+import com.dezdeqness.core.ui.views.buttons.AppButton
+import com.dezdeqness.core.ui.views.buttons.AppOutlinedButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,7 +68,10 @@ fun AuthPage(
     val localState by state.collectAsState()
 
     val gradient = Brush.verticalGradient(
-        colors = listOf(Color(0xFF00BCD4), Color(0xFF0288D1))
+        colors = listOf(
+            AppTheme.colors.secondary,
+            AppTheme.colors.surface,
+        )
     )
 
     val isContentVisible = localState.state != ScreenState.Initial
@@ -77,7 +82,7 @@ fun AuthPage(
                 .fillMaxSize()
                 .background(gradient)
                 .padding(padding)
-                .padding(32.dp),
+                .padding(16.dp),
         ) {
             if (isContentVisible) {
                 Text(
@@ -85,6 +90,7 @@ fun AuthPage(
                     fontSize = 48.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily(Font(R.font.audiowide_regular)),
                     color = Color.White,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -95,27 +101,19 @@ fun AuthPage(
                     modifier = Modifier.align(Alignment.BottomCenter),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-
-                    Button(
+                    AppButton(
+                        title = "Login",
                         onClick = {
                             onAuthorizeClick()
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White,
-                            contentColor = Color(0xFF0288D1)
-                        )
-                    ) {
-                        Text("Login", fontSize = 18.sp)
-                    }
+                    )
 
-                    OutlinedButton(
+                    AppOutlinedButton(
+                        title = "Sign Up",
                         onClick = { onAuthorizeClick() },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
-                    ) {
-                        Text("Sign Up", fontSize = 18.sp)
-                    }
+                    )
                 }
             }
 
@@ -179,12 +177,25 @@ fun AuthPage(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 fun AuthPagePreview() {
-    MaterialTheme {
+    FonoTheme {
         AuthPage(
             state = MutableStateFlow(AuthState()),
+            events = flowOf(),
+            onNavigationMainFlow = {},
+            onAuthorizeClick = {}
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+fun AuthPagePreviewLoaded() {
+    FonoTheme {
+        AuthPage(
+            state = MutableStateFlow(AuthState(state = ScreenState.NotLoggedIn)),
             events = flowOf(),
             onNavigationMainFlow = {},
             onAuthorizeClick = {}

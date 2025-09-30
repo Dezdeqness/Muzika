@@ -39,7 +39,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil3.imageLoader
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
-import com.dezdeqness.core.ui.theme.AppTheme
+import com.dezdeqness.core.ui.theme.FonoTheme
 import com.dezdeqness.core.ui.views.image.LocalAstImageLoader
 import com.dezdeqness.home.navigation.Home
 import com.dezdeqness.home.navigation.homeScreen
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 LocalVersionName provides BuildConfig.VERSION_NAME,
                 LocalAstImageLoader provides this.imageLoader,
             ) {
-                AppTheme {
+                FonoTheme {
                     val playbackConnection by controllerManager.playbackConnection.collectAsStateWithLifecycle()
 
                     CompositionLocalProvider(LocalPlaybackConnection provides playbackConnection) {
