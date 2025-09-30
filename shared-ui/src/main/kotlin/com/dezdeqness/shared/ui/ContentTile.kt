@@ -119,19 +119,19 @@ fun ContentTile(
             }
         }
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
             Text(
                 title,
                 fontSize = 14.sp,
                 maxLines = 1,
-                color = Color.Black,
+                color = AppTheme.colors.textPrimary,
                 overflow = TextOverflow.Ellipsis,
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (isDownloaded) {
                     Icon(
                         painterResource(id = R.drawable.ic_download),
-                        tint = Color.Black,
+                        tint = AppTheme.colors.surface,
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp)
@@ -142,6 +142,7 @@ fun ContentTile(
                 Text(
                     subTitle,
                     fontSize = 12.sp,
+                    color = AppTheme.colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )

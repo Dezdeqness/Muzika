@@ -46,8 +46,6 @@ object DarkColors {
     val Accent = Color(0xFF38BDF8) // cyan highlight
 }
 
-
-
 fun fonoLightColors(): AppColors = AppColors(
     primaryColor = LightColors.Primary,
     primaryVariantColor = LightColors.PrimaryVariant,

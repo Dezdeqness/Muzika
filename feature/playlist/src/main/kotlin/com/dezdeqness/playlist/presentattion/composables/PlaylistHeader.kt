@@ -15,7 +15,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.unit.dp
 import com.dezdeqness.core.ui.theme.AppTheme
@@ -54,13 +53,13 @@ fun PlaylistHeader(
                     Text(
                         state.tracksCount.toString() + " tracks · " + formatTime(state.duration),
                         style = AppTheme.typography.bodySmall,
-                        color = Color.Black.copy(alpha = 0.5f)
+                        color = AppTheme.colors.textSecondary.copy(alpha = 0.8f)
                     )
                 }
                 Text(
                     "By " + state.authorName,
                     style = AppTheme.typography.bodyMedium,
-                    color = Color.Black.copy(alpha = 0.7f)
+                    color = AppTheme.colors.textSecondary
                 )
             }
         }

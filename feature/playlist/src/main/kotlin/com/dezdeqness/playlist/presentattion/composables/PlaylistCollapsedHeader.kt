@@ -1,9 +1,6 @@
 package com.dezdeqness.playlist.presentattion.composables
 
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.only
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,11 +15,11 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.dezdeqness.core.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +44,7 @@ fun PlaylistCollapsedHeader(
         title = {
             Text(
                 text = title,
-                color = Color.Black.copy(alpha = alphaValue),
+                color = AppTheme.colors.textPrimary.copy(alpha = alphaValue),
                 modifier = Modifier.graphicsLayer {
                     translationY = offsetY
                 },
@@ -60,12 +57,12 @@ fun PlaylistCollapsedHeader(
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = null,
-                    tint = Color.Black
+                    tint = AppTheme.colors.onSurface,
                 )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.White.copy(alpha = alphaValue)
+            containerColor = AppTheme.colors.background.copy(alpha = alphaValue)
         )
     )
 

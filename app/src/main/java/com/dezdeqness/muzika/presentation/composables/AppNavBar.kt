@@ -3,7 +3,6 @@ package com.dezdeqness.muzika.presentation.composables
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
@@ -15,6 +14,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.dezdeqness.core.ui.theme.AppTheme
 import com.dezdeqness.muzika.presentation.AquaBottomTabModel
 
 @Composable
@@ -27,7 +27,7 @@ fun AppNavBar(
         modifier = modifier
             .fillMaxWidth()
             .height(height),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = AppTheme.colors.background,
         tonalElevation = 4.dp,
     ) {
         val navBackStackEntry = navController.currentBackStackEntryAsState().value

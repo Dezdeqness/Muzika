@@ -1,6 +1,5 @@
 package com.dezdeqness.settings.presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +27,7 @@ fun SettingsPage(
     onBackClick: () -> Unit,
 ) {
     Scaffold(
-        containerColor = AppTheme.colors.success,
+        containerColor = AppTheme.colors.background,
         modifier = modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
@@ -47,20 +46,19 @@ fun SettingsPage(
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
-                .background(AppTheme.colors.onPrimary),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(vertical = 8.dp)
         ) {
-            item() {
+            item {
                 AppearanceBlock(modifier = blockModifier)
             }
 
-            item() {
+            item {
                 StorageBlock(modifier = blockModifier)
             }
 
-            item() {
+            item {
                 AboutBlock(modifier = blockModifier)
             }
         }
