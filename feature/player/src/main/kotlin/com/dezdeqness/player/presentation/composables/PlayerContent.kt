@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -46,6 +47,8 @@ import coil3.asDrawable
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
+import com.dezdeqness.core.ui.theme.AppTheme
+import com.dezdeqness.core.ui.views.buttons.AppIconButton
 import com.dezdeqness.core.ui.views.image.AppImage
 import com.dezdeqness.core.utils.TimeUtils
 import com.dezdeqness.player.core.BottomSheetState
@@ -91,6 +94,7 @@ fun PlayerContent(
             }
         }
     }
+    val primary = AppTheme.colors.primary
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -145,7 +149,7 @@ fun PlayerContent(
                         bitmap?.let {
                             val colorInt = Palette.from(it)
                                 .generate()
-                                .getDominantColor(Color.Black.toArgb())
+                                .getDominantColor(primary.toArgb())
                             onBackgroundColorChanged(Color(colorInt))
                         }
                     }
@@ -185,6 +189,11 @@ fun PlayerContent(
                         sliderPosition = null
                     },
                     modifier = Modifier.fillMaxWidth(),
+                    colors = SliderDefaults.colors(
+                        inactiveTrackColor = Color.White.copy(alpha = 0.3f),
+                        thumbColor = Color.White,
+                        activeTrackColor = Color.White,
+                    ),
                 )
 
                 Row(
@@ -212,38 +221,39 @@ fun PlayerContent(
 
             Row(
                 horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                IconButton(onClick = { playbackConnection.previousSong() }) {
-                    Icon(
-                        painterResource(R.drawable.ic_previous),
-                        tint = Color.White,
-                        contentDescription = "Previous",
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
+                AppIconButton(
+                    icon = painterResource(R.drawable.ic_previous),
+                    tint = Color.White,
+                    onClick = {
+                        playbackConnection.previousSong()
+                    },
+                )
 
-                IconButton(
+                AppIconButton(
                     onClick = {
                         playbackConnection.togglePauseResume()
                     },
-                ) {
-                    Icon(
-                        painterResource(id = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_resume),
-                        tint = Color.White,
-                        contentDescription = null,
-                        modifier = Modifier.size(36.dp),
-                    )
-                }
+                    contentColor = Color.Transparent,
+                    content = {
+                        Icon(
+                            painterResource(id = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_resume),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(36.dp),
+                        )
+                    }
+                )
 
-                IconButton(onClick = { playbackConnection.nextSong() }) {
-                    Icon(
-                        painterResource(R.drawable.ic_next),
-                        tint = Color.White,
-                        contentDescription = "Previous",
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
+                AppIconButton(
+                    icon = painterResource(R.drawable.ic_next),
+                    tint = Color.White,
+                    onClick = {
+                        playbackConnection.nextSong()
+                    },
+                )
             }
 
         }

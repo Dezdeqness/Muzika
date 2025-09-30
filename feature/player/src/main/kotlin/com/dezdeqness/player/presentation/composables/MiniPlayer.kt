@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +35,7 @@ import coil3.asDrawable
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
+import com.dezdeqness.core.ui.views.buttons.AppIconButton
 import com.dezdeqness.core.ui.views.image.AppImage
 import com.dezdeqness.shared.ui.R
 import kotlinx.coroutines.delay
@@ -121,34 +120,29 @@ fun MiniPlayer(
                         mediaItem.mediaMetadata.artist.toString(),
                         fontSize = 16.sp,
                         maxLines = 1,
-                        color = Color(0x66FFFFFF),
+                        color = Color.White.copy(alpha = 0.7f),
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
 
-                IconButton(
+                AppIconButton(
+                    icon = painterResource(id = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_resume),
+                    tint = Color.White,
                     onClick = {
                         playbackConnection.togglePauseResume()
                     },
-                ) {
-                    Icon(
-                        painterResource(id = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_resume),
-                        tint = Color.White,
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
-
+                )
             }
 
             LinearProgressIndicator(
                 progress = { position.toFloat() / duration },
-                trackColor = Color.Gray,
+                trackColor = Color.White.copy(alpha = 0.3f),
                 color = Color.White,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .fillMaxWidth()
                     .height(2.dp),
+                drawStopIndicator = {},
             )
         }
     }

@@ -1,12 +1,14 @@
 package com.dezdeqness.player.core
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -61,6 +63,13 @@ fun BottomSheet(
     collapsedContent: @Composable BoxScope.() -> Unit,
     content: @Composable BoxScope.() -> Unit,
 ) {
+    val animatedColor by animateColorAsState(targetValue = backgroundColor)
+
+    val topRadius by animateDpAsState(
+        targetValue = if (!state.isExpanded) 16.dp else 0.dp,
+        label = "topRadius"
+    )
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -91,15 +100,16 @@ fun BottomSheet(
             }
             .clip(
                 RoundedCornerShape(
-                    topStart = if (!state.isExpanded) 16.dp else 0.dp,
-                    topEnd = if (!state.isExpanded) 16.dp else 0.dp
+                    topStart = topRadius,
+                    topEnd = topRadius
                 )
             )
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        backgroundColor.lighten(0.4f),
-                        backgroundColor.darken(0.4f)
+                        animatedColor.lighten(0.1f),
+                        animatedColor,
+                        animatedColor.darken(0.25f)
                     )
                 )
             )
