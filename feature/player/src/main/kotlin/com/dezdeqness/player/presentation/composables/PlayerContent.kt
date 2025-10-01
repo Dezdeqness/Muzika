@@ -1,5 +1,6 @@
 package com.dezdeqness.player.presentation.composables
 
+import android.util.Log
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -74,11 +75,19 @@ fun PlayerContent(
 
     val isPlaying by playbackConnection.isPlaying.collectAsState()
 
-    var position by rememberSaveable(playBackSate) {
+    var position by rememberSaveable(currentMediaItem?.mediaId) {
         mutableLongStateOf(playbackConnection.mediaController.currentPosition)
     }
-    var duration by rememberSaveable(playBackSate) {
+    var duration by rememberSaveable(currentMediaItem?.mediaId) {
         mutableLongStateOf(playbackConnection.mediaController.duration)
+    }
+
+    LaunchedEffect(position) {
+        Log.d("PlayerContent", "Duration: $duration")
+    }
+
+    LaunchedEffect(position) {
+        Log.d("PlayerContent", "Position: $position")
     }
 
     var sliderPosition by remember {
@@ -88,9 +97,9 @@ fun PlayerContent(
     LaunchedEffect(playBackSate, mediaItem) {
         if (playBackSate == Player.STATE_READY) {
             while (true) {
-                delay(500)
                 position = playbackConnection.mediaController.currentPosition
                 duration = playbackConnection.mediaController.duration
+                delay(500)
             }
         }
     }
@@ -204,7 +213,7 @@ fun PlayerContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        TimeUtils.convertToTrackTime(sliderPosition ?: position),
+                        if (duration < 0) "" else TimeUtils.convertToTrackTime(sliderPosition ?: position),
                         maxLines = 1,
                         fontSize = 16.sp,
                         color = Color.White,

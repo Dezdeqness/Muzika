@@ -53,19 +53,19 @@ fun MiniPlayer(
     val playBackSate by playbackConnection.playBackState.collectAsState()
     val isPlaying by playbackConnection.isPlaying.collectAsState()
 
-    var position by rememberSaveable(playBackSate) {
+    var position by rememberSaveable(currentMediaItem?.mediaId) {
         mutableLongStateOf(playbackConnection.mediaController.currentPosition)
     }
-    var duration by rememberSaveable(playBackSate) {
+    var duration by rememberSaveable(currentMediaItem?.mediaId) {
         mutableLongStateOf(playbackConnection.mediaController.duration)
     }
 
     LaunchedEffect(playBackSate) {
         if (playBackSate == Player.STATE_READY) {
             while (true) {
-                delay(500)
                 position = playbackConnection.mediaController.currentPosition
                 duration = playbackConnection.mediaController.duration
+                delay(500)
             }
         }
     }
