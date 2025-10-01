@@ -33,7 +33,7 @@ fun HomeSectionItem(
 ) {
     Column(
         modifier = modifier
-            .width(150.dp)
+            .width(120.dp)
             .clip(RoundedCornerShape(6.dp))
             .clickable(
                 onClick = {
@@ -60,7 +60,7 @@ fun HomeSectionItem(
                 shape = RoundedCornerShape(6.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(120.dp)
                     .align(alignment = Alignment.Center),
                 placeholder = ColorPainter(AppTheme.colors.onSurface),
                 error = ColorPainter(AppTheme.colors.onSurface),

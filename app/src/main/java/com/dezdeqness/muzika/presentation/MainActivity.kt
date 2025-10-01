@@ -104,19 +104,20 @@ class MainActivity : AppCompatActivity() {
                                     label = "BottomBarHeight"
                                 )
 
+                                val bottomInset = if (playerBottomSheetState.isCollapsed) 80.dp else 0.dp
+
                                 Scaffold(
                                     bottomBar = {
                                         AppNavBar(
                                             height = animatedHeight,
                                             navController = navController,
                                         )
-                                    }
+                                    },
                                 ) { padding ->
-
                                     val hostPadding = PaddingValues(
                                         start = padding.calculateLeftPadding(LayoutDirection.Ltr),
                                         end = padding.calculateRightPadding(LayoutDirection.Ltr),
-                                        bottom = padding.calculateBottomPadding(),
+                                        bottom = padding.calculateBottomPadding() + bottomInset,
                                     )
                                     BoxWithConstraints(
                                         modifier = Modifier
