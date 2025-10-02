@@ -63,6 +63,10 @@ android {
         create("qa") {
             isMinifyEnabled = true
             isDebuggable = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             applicationIdSuffix = ".test"
             matchingFallbacks.add("debug")
             signingConfig = signingConfigs.getByName("debug")

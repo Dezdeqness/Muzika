@@ -2,7 +2,7 @@ package com.dezdeqness.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-object LightColors {
+object FonoLightColors {
     val Primary = Color(0xFF2563EB) // vivid blue
     val PrimaryVariant = Color(0xFF1E40AF) // deep navy-blue
     val Secondary = Color(0xFF3B82F6) // bright accent blue
@@ -24,7 +24,7 @@ object LightColors {
     val Accent = Color(0xFF38BDF8) // cyan accent
 }
 
-object DarkColors {
+object FonoDarkColors {
     val Primary = Color(0xFF3B82F6) // bright blue
     val PrimaryVariant = Color(0xFF1E3A8A) // navy blue
     val Secondary = Color(0xFF60A5FA) // soft blue accent
@@ -47,45 +47,45 @@ object DarkColors {
 }
 
 fun fonoLightColors(): AppColors = AppColors(
-    primaryColor = LightColors.Primary,
-    primaryVariantColor = LightColors.PrimaryVariant,
-    secondaryColor = LightColors.Secondary,
-    backgroundColor = LightColors.Background,
-    surfaceColor = LightColors.Surface,
-    surfaceVariantColor = LightColors.SurfaceVariant,
-    borderColor = LightColors.Border,
-    onPrimaryColor = LightColors.OnPrimary,
-    onSecondaryColor = LightColors.OnSecondary,
-    onBackgroundColor = LightColors.OnBackground,
-    onSurfaceColor = LightColors.OnSurface,
-    textPrimaryColor = LightColors.TextPrimary,
-    textSecondaryColor = LightColors.TextSecondary,
-    textDisabledColor = LightColors.TextDisabled,
-    rippleColor = LightColors.Ripple,
-    errorColor = LightColors.Error,
-    successColor = LightColors.Success,
-    warningColor = LightColors.Warning,
-    accentColor = LightColors.Accent,
+    primaryColor = FonoLightColors.Primary,
+    primaryVariantColor = FonoLightColors.PrimaryVariant,
+    secondaryColor = FonoLightColors.Secondary,
+    backgroundColor = FonoLightColors.Background,
+    surfaceColor = FonoLightColors.Surface,
+    surfaceVariantColor = FonoLightColors.SurfaceVariant,
+    borderColor = FonoLightColors.Border,
+    onPrimaryColor = FonoLightColors.OnPrimary,
+    onSecondaryColor = FonoLightColors.OnSecondary,
+    onBackgroundColor = FonoLightColors.OnBackground,
+    onSurfaceColor = FonoLightColors.OnSurface,
+    textPrimaryColor = FonoLightColors.TextPrimary,
+    textSecondaryColor = FonoLightColors.TextSecondary,
+    textDisabledColor = FonoLightColors.TextDisabled,
+    rippleColor = FonoLightColors.Ripple,
+    errorColor = FonoLightColors.Error,
+    successColor = FonoLightColors.Success,
+    warningColor = FonoLightColors.Warning,
+    accentColor = FonoLightColors.Accent,
 )
 
 fun fonoDarkColors(): AppColors = AppColors(
-    primaryColor = DarkColors.Primary,
-    primaryVariantColor = DarkColors.PrimaryVariant,
-    secondaryColor = DarkColors.Secondary,
-    backgroundColor = DarkColors.Background,
-    surfaceColor = DarkColors.Surface,
-    surfaceVariantColor = DarkColors.SurfaceVariant,
-    borderColor = DarkColors.Border,
-    onPrimaryColor = DarkColors.OnPrimary,
-    onSecondaryColor = DarkColors.OnSecondary,
-    onBackgroundColor = DarkColors.OnBackground,
-    onSurfaceColor = DarkColors.OnSurface,
-    textPrimaryColor = DarkColors.TextPrimary,
-    textSecondaryColor = DarkColors.TextSecondary,
-    textDisabledColor = DarkColors.TextDisabled,
-    rippleColor = DarkColors.Ripple,
-    errorColor = DarkColors.Error,
-    successColor = DarkColors.Success,
-    warningColor = DarkColors.Warning,
-    accentColor = DarkColors.Accent,
+    primaryColor = FonoDarkColors.Primary,
+    primaryVariantColor = FonoDarkColors.PrimaryVariant,
+    secondaryColor = FonoDarkColors.Secondary,
+    backgroundColor = FonoDarkColors.Background,
+    surfaceColor = FonoDarkColors.Surface,
+    surfaceVariantColor = FonoDarkColors.SurfaceVariant,
+    borderColor = FonoDarkColors.Border,
+    onPrimaryColor = FonoDarkColors.OnPrimary,
+    onSecondaryColor = FonoDarkColors.OnSecondary,
+    onBackgroundColor = FonoDarkColors.OnBackground,
+    onSurfaceColor = FonoDarkColors.OnSurface,
+    textPrimaryColor = FonoDarkColors.TextPrimary,
+    textSecondaryColor = FonoDarkColors.TextSecondary,
+    textDisabledColor = FonoDarkColors.TextDisabled,
+    rippleColor = FonoDarkColors.Ripple,
+    errorColor = FonoDarkColors.Error,
+    successColor = FonoDarkColors.Success,
+    warningColor = FonoDarkColors.Warning,
+    accentColor = FonoDarkColors.Accent,
 )
