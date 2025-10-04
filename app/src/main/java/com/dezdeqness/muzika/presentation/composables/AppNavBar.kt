@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -56,10 +55,6 @@ fun AppNavBar(
                         contentDescription = null,
                     )
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = AppTheme.colors.onPrimary,
-                    indicatorColor = AppTheme.colors.primary,
-                )
             )
         }
     }

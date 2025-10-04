@@ -8,7 +8,7 @@ object FonoLightColors {
     val Secondary = Color(0xFF3B82F6) // bright accent blue
     val Background = Color(0xFFE6F0FA) // soft light blue background
     val Surface = Color(0xFFFFFFFF)
-    val SurfaceVariant = Color(0xFFDCEAF8) // bluish highlight surface
+    val SurfaceVariant = Color(0xFFC5D4FA) // bluish highlight surface
     val Border = Color(0xFFB0C4DE) // steel blue border
     val OnPrimary = Color.White
     val OnSecondary = Color.White
