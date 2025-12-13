@@ -15,8 +15,8 @@ class PlaylistTracksRepositoryImpl(
     override fun createPager(usn: String) =
         Pager(
             config = PagingConfig(
-                pageSize = 20,
-                initialLoadSize = 20,
+                pageSize = 40,
+                initialLoadSize = 40,
                 prefetchDistance = 10,
             ),
             pagingSourceFactory = {

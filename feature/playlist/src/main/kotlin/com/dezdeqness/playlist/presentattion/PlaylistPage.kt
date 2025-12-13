@@ -16,7 +16,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -62,24 +61,6 @@ fun PlaylistPage(
     val isAppending = tracks.loadState.append is LoadState.Loading
 
     val isRefreshing = tracks.loadState.refresh is LoadState.Loading
-
-    // TODO: make separate playlist entity
-    LaunchedEffect(isPlaying, tracks.itemSnapshotList.items) {
-        if (isPlaying) {
-            onPlaylistChanged(tracks.itemSnapshotList.items)
-        }
-    }
-
-    LaunchedEffect(mediaItem, isPlaying, tracks.itemSnapshotList.items, tracks.loadState) {
-        if (isPlaying.not()) return@LaunchedEffect
-
-        val index = tracks.itemSnapshotList.items.indexOfFirst { it.id == mediaItem?.mediaId }
-        if (index != -1 && index == tracks.itemSnapshotList.items.lastIndex) {
-            if (tracks.loadState.append.endOfPaginationReached) return@LaunchedEffect
-
-            tracks[index + 1]
-        }
-    }
 
     Scaffold(
         modifier = modifier
@@ -131,8 +112,9 @@ fun PlaylistPage(
                         ContentTile(
                             modifier = Modifier.clickable(
                                 onClick = {
-                                    onPlaylistChanged(tracks.itemSnapshotList.items)
-                                    onSongClick(tracks.itemSnapshotList.items.indexOf(item))
+                                    val items = tracks.itemSnapshotList.items
+                                    onPlaylistChanged(items)
+                                    onSongClick(items.indexOf(item))
                                 }
                             ),
                             title = item.name,

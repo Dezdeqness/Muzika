@@ -17,7 +17,7 @@ class PlaylistRemoteDataSourceImpl(
     ): Result<PlaylistTracksState> = tryWithCatch{
         val response = playlistService.playlistTracks(
             map = mapOf(
-                "limit" to 20,
+                "limit" to 40,
                 "linked_partitioning" to true,
                 "access" to "playable",
                 "offset" to (key ?: "0"),

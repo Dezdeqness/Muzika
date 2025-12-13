@@ -14,7 +14,7 @@ class LikedSongRemoteDataSourceImpl(
     override suspend fun getLikedSongs(key: String?) = tryWithCatch {
         val response = likedService.liked(
             map = mapOf(
-                "limit" to 20,
+                "limit" to 40,
                 "linked_partitioning" to true,
                 "access" to "playable",
                 "cursor" to key.orEmpty(),
@@ -26,7 +26,7 @@ class LikedSongRemoteDataSourceImpl(
                 ?: return@tryWithCatch Result.failure(Throwable("Code: ${response.code}\nError: ${response.errorBody()}"))
 
             Result.success(LikedState(
-                list = body.collection?.mapNotNull(songMapper::toEntity) ?: listOf(),
+                list = body.collection?.map(songMapper::toEntity) ?: listOf(),
                 nextKey = body.nextHref.orEmpty(),
             ))
         } else {
