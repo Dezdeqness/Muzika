@@ -26,4 +26,7 @@ class AuthRepositoryImpl(
 
     override suspend fun isTokenExpired() = tokenDataProvider.getTokenData()?.isExpired == true
     override suspend fun isLoggedIn() = tokenDataProvider.getTokenData()?.isDataValid == true
+    override suspend fun clearToken() {
+        tokenDataProvider.clearToken()
+    }
 }

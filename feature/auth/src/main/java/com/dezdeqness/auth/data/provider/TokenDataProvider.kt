@@ -37,6 +37,12 @@ class TokenDataProvider(
         }
     }
 
+    suspend fun clearToken() {
+        context.dataStore.edit { settings ->
+            settings.clear()
+        }
+    }
+
     companion object {
         private const val TOKEN_FILE_NAME = "token"
         private const val KEY_ACCESS_TOKEN = "access_token"

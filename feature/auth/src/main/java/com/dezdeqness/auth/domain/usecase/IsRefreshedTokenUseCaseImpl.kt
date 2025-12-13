@@ -19,6 +19,7 @@ class IsRefreshedTokenUseCaseImpl(
         return authRepository
             .refreshToken()
             .onSuccess { tokenDataProvider.setTokenData(it) }
+            .onFailure { authRepository.clearToken() }
             .map { true }
     }
 
