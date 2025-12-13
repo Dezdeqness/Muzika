@@ -5,6 +5,7 @@ import com.dezdeqness.core.network.data.interceptors.AuthTokenInterceptor
 import com.dezdeqness.core.network.data.interceptors.RefreshTokenInterceptor
 import com.dezdeqness.core.network.domain.IsRefreshedTokenUseCase
 import com.dezdeqness.core.network.domain.RetrieveAccessTokenUseCase
+import com.dezdeqness.core.network.event.AppEventHandler
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
@@ -27,6 +28,9 @@ import org.koin.core.annotation.Single
 @Module
 class CoreNetworkModule {
     @Single
+    fun provideAppEventHandler(): AppEventHandler = AppEventHandler()
+
+    @Single
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         explicitNulls = false
@@ -41,8 +45,9 @@ class CoreNetworkModule {
 
     @Single
     fun provideRefreshTokenInterceptor(
-        @Provided isRefreshedTokenUseCase: IsRefreshedTokenUseCase
-    ): RefreshTokenInterceptor = RefreshTokenInterceptor(isRefreshedTokenUseCase)
+        @Provided isRefreshedTokenUseCase: IsRefreshedTokenUseCase,
+        @Provided appEventHandler: AppEventHandler,
+    ): RefreshTokenInterceptor = RefreshTokenInterceptor(isRefreshedTokenUseCase, appEventHandler)
 
     @Single
     @Named(Qualifiers.defaultClientQualifier)

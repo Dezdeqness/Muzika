@@ -40,6 +40,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil3.imageLoader
+import com.dezdeqness.auth.presentation.AuthActivity
+import com.dezdeqness.core.network.event.AppEvent
+import com.dezdeqness.core.network.event.AppEventHandler
 import com.dezdeqness.core.player.locals.LocalPlaybackConnection
 import com.dezdeqness.core.ui.theme.FonoTheme
 import com.dezdeqness.core.ui.views.image.LocalAstImageLoader
@@ -58,10 +61,13 @@ import com.dezdeqness.settings.core.LocalVersionName
 import com.dezdeqness.settings.navigation.Settings
 import com.dezdeqness.settings.navigation.settingsScreen
 import kotlinx.serialization.Serializable
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var controllerManager: PlayerControllerManager
+
+    private val appEventHandler: AppEventHandler by inject()
 
     @androidx.annotation.OptIn(UnstableApi::class)
     @OptIn(ExperimentalMaterial3Api::class)
@@ -85,6 +91,22 @@ class MainActivity : AppCompatActivity() {
             ) {
                 FonoTheme {
                     val playbackConnection by controllerManager.playbackConnection.collectAsStateWithLifecycle()
+
+                    LaunchedEffect(Unit) {
+                        appEventHandler.events.collect { event ->
+                            when (event) {
+                                AppEvent.SessionExpired -> {
+                                    startActivity(
+                                        Intent(
+                                            this@MainActivity,
+                                            AuthActivity::class.java
+                                        )
+                                    )
+                                    finishAffinity()
+                                }
+                            }
+                        }
+                    }
 
                     CompositionLocalProvider(LocalPlaybackConnection provides playbackConnection) {
                         val playerBottomSheetState = rememberBottomSheetState(
