@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -97,7 +99,19 @@ class MainActivity : AppCompatActivity() {
                             modifier = Modifier.fillMaxSize(),
                         ) {
                             composable<Root> {
-                                val navController = rememberNavController()
+                                val homeNavController = rememberNavController()
+                                val likedNavController = rememberNavController()
+                                val settingsNavController = rememberNavController()
+
+                                val tabHistory = remember {
+                                    mutableStateListOf(AquaBottomTabModel.HOME)
+                                }
+
+                                val selectedTab = tabHistory.last()
+
+                                BackHandler(enabled = tabHistory.size > 1) {
+                                    tabHistory.removeAt(tabHistory.lastIndex)
+                                }
 
                                 val animatedHeight by animateDpAsState(
                                     targetValue = 80.dp * (1f - playerBottomSheetState.progress),
@@ -110,7 +124,12 @@ class MainActivity : AppCompatActivity() {
                                     bottomBar = {
                                         AppNavBar(
                                             height = animatedHeight,
-                                            navController = navController,
+                                            selectedTab = selectedTab,
+                                            onTabSelected = { tab ->
+                                                if (tab != selectedTab) {
+                                                    tabHistory.add(tab)
+                                                }
+                                            },
                                         )
                                     },
                                 ) { padding ->
@@ -134,94 +153,122 @@ class MainActivity : AppCompatActivity() {
                                             )
                                         }
 
-                                        NavHost(
-                                            navController = navController,
-                                            startDestination = Home,
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .padding(top = padding.calculateTopPadding())
-                                        ) {
-                                            homeScreen(
-                                                onPlaylistClicked = {
-                                                    navController.navigate(
-                                                        Playlist(
-                                                            id = it.id,
-                                                            title = it.title,
-                                                            userName = it.userName,
-                                                            imageUrl = it.imageUrl,
-                                                            urn = it.urn,
-                                                            description = it.description,
-                                                            duration = it.duration,
-                                                            tracksCount = it.tracksCount,
-                                                        )
-                                                    )
-                                                }
-                                            )
-
-                                            likedScreen(
-                                                onPlaylistChanged = { items ->
-                                                    val mediaItems = items.map { item ->
-                                                        MediaItem
-                                                            .Builder()
-                                                            .setMediaId(item.id)
-                                                            .setUri(item.streamUrl)
-                                                            .setCustomCacheKey(item.id)
-                                                            .setTag(item)
-                                                            .setMediaMetadata(
-                                                                MediaMetadata
-                                                                    .Builder()
-                                                                    .setTitle(item.name)
-                                                                    .setSubtitle(item.authorName)
-                                                                    .setArtist(item.authorName)
-                                                                    .setArtworkUri(item.iconImageUrl.toUri())
-                                                                    .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
-                                                                    .build()
+                                        when (selectedTab) {
+                                            AquaBottomTabModel.HOME -> {
+                                                NavHost(
+                                                    navController = homeNavController,
+                                                    startDestination = Home,
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .padding(top = padding.calculateTopPadding())
+                                                ) {
+                                                    homeScreen(
+                                                        onPlaylistClicked = {
+                                                            homeNavController.navigate(
+                                                                Playlist(
+                                                                    id = it.id,
+                                                                    title = it.title,
+                                                                    userName = it.userName,
+                                                                    imageUrl = it.imageUrl,
+                                                                    urn = it.urn,
+                                                                    description = it.description,
+                                                                    duration = it.duration,
+                                                                    tracksCount = it.tracksCount,
+                                                                )
                                                             )
-                                                            .build()
-                                                    }
-
-                                                    playbackConnection?.updatePlaylist(
-                                                        mediaItems
+                                                        }
                                                     )
-                                                },
-                                                onSongClick = { index ->
-                                                    playbackConnection?.startPlay(index)
-                                                }
-                                            )
 
-                                            playlistScreen(
-                                                onBackClicked = navController::popBackStack,
-                                                onPlaylistChanged = { items ->
-                                                    val mediaItems = items.map { item ->
-                                                        MediaItem
-                                                            .Builder()
-                                                            .setMediaId(item.id)
-                                                            .setUri(item.streamUrl)
-                                                            .setCustomCacheKey(item.id)
-                                                            .setTag(item)
-                                                            .setMediaMetadata(
-                                                                MediaMetadata
+                                                    playlistScreen(
+                                                        onBackClicked = homeNavController::popBackStack,
+                                                        onPlaylistChanged = { items ->
+                                                            val mediaItems = items.map { item ->
+                                                                MediaItem
                                                                     .Builder()
-                                                                    .setTitle(item.name)
-                                                                    .setSubtitle(item.authorName)
-                                                                    .setArtist(item.authorName)
-                                                                    .setArtworkUri(item.iconImageUrl.toUri())
-                                                                    .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
+                                                                    .setMediaId(item.id)
+                                                                    .setUri(item.streamUrl)
+                                                                    .setCustomCacheKey(item.id)
+                                                                    .setTag(item)
+                                                                    .setMediaMetadata(
+                                                                        MediaMetadata
+                                                                            .Builder()
+                                                                            .setTitle(item.name)
+                                                                            .setSubtitle(item.authorName)
+                                                                            .setArtist(item.authorName)
+                                                                            .setArtworkUri(item.iconImageUrl.toUri())
+                                                                            .setMediaType(
+                                                                                MediaMetadata.MEDIA_TYPE_MUSIC
+                                                                            )
+                                                                            .build()
+                                                                    )
                                                                     .build()
+                                                            }
+
+                                                            playbackConnection?.updatePlaylist(
+                                                                mediaItems
                                                             )
-                                                            .build()
-                                                    }
-
-                                                    playbackConnection?.updatePlaylist(
-                                                        mediaItems
+                                                        },
+                                                        onSongClick = { index ->
+                                                            playbackConnection?.startPlay(index)
+                                                        }
                                                     )
-                                                },
-                                                onSongClick = { index ->
-                                                    playbackConnection?.startPlay(index)
                                                 }
-                                            )
+                                            }
 
-                                            settingsScreen(navController::popBackStack)
+                                            AquaBottomTabModel.SAVED -> {
+                                                NavHost(
+                                                    navController = likedNavController,
+                                                    startDestination = Liked,
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .padding(top = padding.calculateTopPadding())
+                                                ) {
+                                                    likedScreen(
+                                                        onPlaylistChanged = { items ->
+                                                            val mediaItems = items.map { item ->
+                                                                MediaItem
+                                                                    .Builder()
+                                                                    .setMediaId(item.id)
+                                                                    .setUri(item.streamUrl)
+                                                                    .setCustomCacheKey(item.id)
+                                                                    .setTag(item)
+                                                                    .setMediaMetadata(
+                                                                        MediaMetadata
+                                                                            .Builder()
+                                                                            .setTitle(item.name)
+                                                                            .setSubtitle(item.authorName)
+                                                                            .setArtist(item.authorName)
+                                                                            .setArtworkUri(item.iconImageUrl.toUri())
+                                                                            .setMediaType(
+                                                                                MediaMetadata.MEDIA_TYPE_MUSIC
+                                                                            )
+                                                                            .build()
+                                                                    )
+                                                                    .build()
+                                                            }
+
+                                                            playbackConnection?.updatePlaylist(
+                                                                mediaItems
+                                                            )
+                                                        },
+                                                        onSongClick = { index ->
+                                                            playbackConnection?.startPlay(index)
+                                                        }
+                                                    )
+                                                }
+                                            }
+
+                                            AquaBottomTabModel.SETTINGS -> {
+                                                NavHost(
+                                                    navController = settingsNavController,
+                                                    startDestination = Settings,
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .padding(top = padding.calculateTopPadding())
+                                                ) {
+                                                    settingsScreen(settingsNavController::popBackStack)
+                                                }
+                                            }
                                         }
 
                                         val currentMediaItem =
