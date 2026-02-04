@@ -24,7 +24,6 @@ import com.dezdeqness.settings.presentation.composables.StorageBlock
 @Composable
 fun SettingsPage(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit,
 ) {
     Scaffold(
         containerColor = AppTheme.colors.background,
@@ -32,8 +31,8 @@ fun SettingsPage(
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             AppToolbar(
+                navigationIcon = null,
                 title = "Settings",
-                navigationClick = onBackClick,
                 windowInsets = WindowInsets(0.dp),
             )
         },

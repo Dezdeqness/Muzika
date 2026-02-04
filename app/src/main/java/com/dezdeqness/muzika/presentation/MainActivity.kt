@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity() {
                                         startDestination = routeSettings,
                                         route = BottomGraph.Settings.route
                                     ) {
-                                        settingsScreen(navController::popBackStack)
+                                        settingsScreen()
                                     }
                                 }
 

@@ -6,12 +6,8 @@ import com.dezdeqness.settings.presentation.SettingsPage
 
 const val routeSettings = "Settings"
 
-fun NavGraphBuilder.settingsScreen(
-    onBackClick: () -> Unit,
-) {
+fun NavGraphBuilder.settingsScreen() {
     composable(route = routeSettings) {
-        SettingsPage(
-            onBackClick = onBackClick,
-        )
+        SettingsPage()
     }
 }
