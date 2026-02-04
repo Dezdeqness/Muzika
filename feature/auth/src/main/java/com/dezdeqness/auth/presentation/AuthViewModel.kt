@@ -1,21 +1,21 @@
 package com.dezdeqness.auth.presentation
 
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dezdeqness.auth.core.AuthConstants
 import com.dezdeqness.auth.data.provider.AuthorizationUrlProvider
-import com.dezdeqness.auth.utils.PKCEUtils
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
-import androidx.core.net.toUri
 import com.dezdeqness.auth.domain.repository.AuthRepository
 import com.dezdeqness.auth.domain.usecase.LoginUseCase
+import com.dezdeqness.auth.utils.PKCEUtils
 import com.dezdeqness.core.dispatcher.CoroutineDispatcherProvider
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -39,7 +39,7 @@ class AuthViewModel(
 
     init {
         viewModelScope.launch(coroutineDispatcherProvider.io()) {
-            if (authRepository.isLoggedIn()) {
+            if (authRepository.isLoggedIn() && authRepository.isTokenExpired().not()) {
                 delay(1000)
                 _events.send(AuthEvent.NavigateMainFlow)
             } else {
