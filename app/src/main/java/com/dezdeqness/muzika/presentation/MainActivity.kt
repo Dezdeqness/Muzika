@@ -34,6 +34,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -191,9 +192,10 @@ class MainActivity : AppCompatActivity() {
                                                 val mediaItems = items.map { item ->
                                                     MediaItem.Builder()
                                                         .setMediaId(item.id)
-                                                        .setUri(item.streamUrl)
-                                                        .setCustomCacheKey(item.id)
+                                                        .setUri(item.urn)
+                                                        .setCustomCacheKey(item.urn)
                                                         .setTag(item)
+                                                        .setMimeType(MimeTypes.APPLICATION_M3U8)
                                                         .setMediaMetadata(
                                                             MediaMetadata.Builder()
                                                                 .setTitle(item.name)
@@ -221,10 +223,11 @@ class MainActivity : AppCompatActivity() {
                                             onPlaylistChanged = { items ->
                                                 val mediaItems = items.map { item ->
                                                     MediaItem.Builder()
-                                                        .setMediaId(item.id)
-                                                        .setUri(item.streamUrl)
-                                                        .setCustomCacheKey(item.id)
+                                                        .setMediaId(item.urn)
+                                                        .setUri(item.urn)
+                                                        .setCustomCacheKey(item.urn)
                                                         .setTag(item)
+                                                        .setMimeType(MimeTypes.APPLICATION_M3U8)
                                                         .setMediaMetadata(
                                                             MediaMetadata.Builder()
                                                                 .setTitle(item.name)

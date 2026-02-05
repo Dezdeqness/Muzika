@@ -42,6 +42,7 @@ ksp {
 dependencies {
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.ktorfit.common)
+    ksp(libs.ktorfit.ksp)
     implementation(libs.okhttp.logging)
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)

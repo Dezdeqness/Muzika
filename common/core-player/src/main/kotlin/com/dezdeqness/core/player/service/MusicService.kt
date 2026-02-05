@@ -1,10 +1,9 @@
 package com.dezdeqness.core.player.service
 
 import androidx.annotation.OptIn
+import androidx.core.net.toUri
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
-import androidx.media3.common.PlaybackException
-import androidx.media3.common.Player
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.ResolvingDataSource
@@ -14,6 +13,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import com.dezdeqness.core.network.data.api.StreamsService
 import com.dezdeqness.core.network.domain.RetrieveAccessTokenUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -28,6 +28,8 @@ class MusicService : MediaSessionService(), MediaSession.Callback {
     val downloaderCache: SimpleCache by inject(named("DownloadCache"))
 
     val retrieveAccessTokenUseCase: RetrieveAccessTokenUseCase by inject()
+
+    val streamsService: StreamsService by inject()
 
     private var mediaSession: MediaSession? = null
 
@@ -75,8 +77,6 @@ class MusicService : MediaSessionService(), MediaSession.Callback {
                         .setUpstreamDataSourceFactory(DefaultDataSource.Factory(this))
                 )
         ) { dataSpec ->
-            val mediaId = dataSpec.key ?: error("No media id")
-
 //            if (downloaderCache.isCached(
 //                    mediaId,
 //                    dataSpec.position,
@@ -91,13 +91,27 @@ class MusicService : MediaSessionService(), MediaSession.Callback {
 //                return@Factory dataSpec.withUri(it.first.toUri())
 //            }
 
+            val uri = dataSpec.uri
+
+            if (uri.toString().startsWith("https://")) {
+                return@Factory dataSpec
+            }
+
             // refresh possible needed, also in case of missed url
             // need to fetch API request
             val token = runBlocking(Dispatchers.IO) {
                 retrieveAccessTokenUseCase.invoke().getOrNull()
             }
-            dataSpec.withUri(dataSpec.uri)
-                .subrange(dataSpec.uriPositionOffset, dataSpec.length)
+
+            val streamsResponse = runBlocking(Dispatchers.IO) {
+                streamsService.getStreams(dataSpec.uri.toString())
+            }
+
+            val streamUrl = streamsResponse.hlsMp3128Url
+                ?: streamsResponse.previewMp3128Url
+                ?: error("No stream URL available for track ${dataSpec.uri}")
+
+            dataSpec.withUri(streamUrl.toUri())
                 .withAdditionalHeaders(
                     mapOf("Authorization" to "OAuth $token")
                 )

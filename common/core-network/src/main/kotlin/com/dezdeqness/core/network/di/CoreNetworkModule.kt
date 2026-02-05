@@ -1,6 +1,8 @@
 package com.dezdeqness.core.network.di
 
 import com.dezdeqness.core.network.core.CoreConstants
+import com.dezdeqness.core.network.data.api.StreamsService
+import com.dezdeqness.core.network.data.api.createStreamsService
 import com.dezdeqness.core.network.data.interceptors.AuthTokenInterceptor
 import com.dezdeqness.core.network.data.interceptors.RefreshTokenInterceptor
 import com.dezdeqness.core.network.domain.IsRefreshedTokenUseCase
@@ -102,5 +104,10 @@ class CoreNetworkModule {
             .httpClient(httpClient)
             .converterFactories(ResponseConverterFactory())
             .build()
+
+    @Single
+    fun provideStreamsService(@Named(Qualifiers.sharedKtorfitQualified) ktorfit: Ktorfit): StreamsService {
+        return ktorfit.createStreamsService()
+    }
 
 }

@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":common:core-network"))
 
     api(libs.media3.exoplayer)
+    api(libs.media3.exoplayer.hls)
     api(libs.media3.ui)
     api(libs.media3.common)
     api(libs.media3.session)

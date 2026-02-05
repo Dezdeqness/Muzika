@@ -9,6 +9,7 @@ class PlaylistTrackUiMapper {
     fun toUiModel(data: SongEntity) =
         PlaylistTrackUiModel(
             id = data.id.toString(),
+            urn = data.urn,
             name = data.title,
             authorName = data.metadataArtist ?: data.userEntity.userName,
             iconImageUrl = (data.artworkUrl ?: data.userEntity.userAvatar).replace("large", "t500x500"),
