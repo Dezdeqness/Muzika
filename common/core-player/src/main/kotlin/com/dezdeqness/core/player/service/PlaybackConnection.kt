@@ -16,6 +16,8 @@ class PlaybackConnection(
     val isPlaying = MutableStateFlow(mediaController.playWhenReady)
     val currentMediaItem = MutableStateFlow(mediaController.currentMediaItem)
     val playBackState = MutableStateFlow(mediaController.playbackState)
+    val shuffleModeEnabled = MutableStateFlow(mediaController.shuffleModeEnabled)
+    val repeatMode = MutableStateFlow(mediaController.repeatMode)
 
     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
         isPlaying.value = playWhenReady
@@ -31,12 +33,34 @@ class PlaybackConnection(
         playBackState.value = state
     }
 
+    override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
+        super.onShuffleModeEnabledChanged(shuffleModeEnabled)
+        this.shuffleModeEnabled.value = shuffleModeEnabled
+    }
+
+    override fun onRepeatModeChanged(repeatMode: Int) {
+        super.onRepeatModeChanged(repeatMode)
+        this.repeatMode.value = repeatMode
+    }
+
     fun onPositionChanged(position: Long) {
         mediaController.seekTo(position)
     }
 
     fun togglePauseResume() {
         mediaController.playWhenReady = !mediaController.playWhenReady
+    }
+
+    fun toggleShuffle() {
+        mediaController.shuffleModeEnabled = !mediaController.shuffleModeEnabled
+    }
+
+    fun cycleRepeatMode() {
+        mediaController.repeatMode = when (mediaController.repeatMode) {
+            Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ONE
+            Player.REPEAT_MODE_ONE -> Player.REPEAT_MODE_ALL
+            else -> Player.REPEAT_MODE_OFF
+        }
     }
 
     fun dispose() {
@@ -61,7 +85,6 @@ class PlaybackConnection(
             mediaController.prepare()
             mediaController.playWhenReady = true
         } else {
-
             mediaController.seekTo(0)
         }
     }
@@ -69,7 +92,6 @@ class PlaybackConnection(
     fun startPlay(index: Int) {
         mediaController.seekTo(index, 0)
         mediaController.prepare()
-
         mediaController.playWhenReady = true
     }
 }

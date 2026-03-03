@@ -1,6 +1,5 @@
 package com.dezdeqness.player.presentation.composables
 
-import android.util.Log
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +42,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.Player
+import androidx.media3.common.Player.REPEAT_MODE_OFF
+import androidx.media3.common.Player.REPEAT_MODE_ONE
 import androidx.palette.graphics.Palette
 import coil3.asDrawable
 import coil3.request.ImageRequest
@@ -82,13 +83,8 @@ fun PlayerContent(
         mutableLongStateOf(playbackConnection.mediaController.duration)
     }
 
-    LaunchedEffect(position) {
-        Log.d("PlayerContent", "Duration: $duration")
-    }
-
-    LaunchedEffect(position) {
-        Log.d("PlayerContent", "Position: $position")
-    }
+    val shuffleModeEnabled by playbackConnection.shuffleModeEnabled.collectAsState()
+    val repeatMode by playbackConnection.repeatMode.collectAsState()
 
     var sliderPosition by remember {
         mutableStateOf<Long?>(null)
@@ -229,10 +225,18 @@ fun PlayerContent(
             }
 
             Row(
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                AppIconButton(
+                    icon = painterResource(R.drawable.ic_shuffle),
+                    tint = if (shuffleModeEnabled) Color.White else Color.White.copy(alpha = 0.3f),
+                    onClick = {
+                        playbackConnection.toggleShuffle()
+                    },
+                )
+
                 AppIconButton(
                     icon = painterResource(R.drawable.ic_previous),
                     tint = Color.White,
@@ -261,6 +265,21 @@ fun PlayerContent(
                     tint = Color.White,
                     onClick = {
                         playbackConnection.nextSong()
+                    },
+                )
+
+                AppIconButton(
+                    icon = painterResource(
+                        when (repeatMode) {
+                            REPEAT_MODE_ONE -> R.drawable.ic_repeat_one
+                            else -> R.drawable.ic_repeat
+                        }
+                    ),
+                    tint = if (repeatMode != REPEAT_MODE_OFF) Color.White else Color.White.copy(
+                        alpha = 0.3f
+                    ),
+                    onClick = {
+                        playbackConnection.cycleRepeatMode()
                     },
                 )
             }
